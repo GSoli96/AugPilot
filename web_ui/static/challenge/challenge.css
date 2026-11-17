@@ -1,0 +1,49 @@
+/* Pagina «Sfida»: usa le variabili e i controlli di evidence.css e i colori degli assi (.evx-*) di site/site.css. */
+.ch-select { font: inherit; font-size: .9rem; min-height: 38px; min-width: 260px; max-width: 100%; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); }
+.ch-note { color: var(--warn); }
+.ch-page .ev-card h2, .ch-h { font-size: 1.05rem; }
+.ch-h { margin: 6px 0 8px; }
+.ch-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+.ch-chip { font: inherit; font-size: .88rem; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 8px; padding: 6px 12px; cursor: pointer; min-height: 40px; text-align: left; display: flex; flex-direction: column; gap: 0; }
+.ch-chip small { color: var(--muted); font-size: .74rem; }
+.ch-chip:hover { background: var(--surface2); }
+.ch-chip[aria-checked="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+.ch-chip[aria-checked="true"] small { color: inherit; opacity: .85; }
+.ch-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ch-go { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-text); border-radius: 8px; padding: 8px 26px; min-height: 42px; cursor: pointer; }
+.ch-go:disabled { opacity: .45; cursor: not-allowed; }
+.ch-picked { color: var(--muted); font-size: .88rem; }
+.ch-verdict { border: 1px solid var(--line); border-left-width: 6px; border-radius: var(--radius); background: var(--surface); padding: 12px 16px; margin-bottom: 14px; }
+.ch-verdict b { font-size: 1.1rem; display: block; }
+.ch-verdict p { color: var(--muted); font-size: .88rem; margin-top: 3px; max-width: 100ch; }
+.ch-verdict.v-visitor { border-left-color: var(--ok); }
+.ch-verdict.v-augpilot { border-left-color: var(--accent); }
+.ch-verdict.v-tie { border-left-color: var(--warn); }
+.ch-verdict.v-none { border-left-color: var(--axis); }
+.ch-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; margin-bottom: 14px; }
+@media (max-width: 860px) { .ch-duo { grid-template-columns: 1fr; } }
+.ch-duo .ev-card { margin-bottom: 0; }
+.ch-kick { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+.ch-algo { font-size: 1.25rem; font-weight: 700; margin: 2px 0 6px; overflow-wrap: anywhere; }
+.ch-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.ch-tag { border: 1px solid var(--line); border-radius: 999px; padding: 0 9px; font-size: .78rem; color: var(--muted); background: var(--surface2); font-variant-numeric: tabular-nums; }
+.ch-tag.good { color: var(--ok); background: var(--ok-bg); border-color: transparent; font-weight: 600; }
+.ch-tag.bad { color: var(--bad); background: var(--bad-bg); border-color: transparent; }
+.ch-text { font-size: .86rem; color: var(--muted); margin: 6px 0; max-width: 70ch; }
+.ch-nb { margin: 4px 0 0; padding-left: 18px; font-size: .84rem; color: var(--muted); }
+.ch-fallback { border: 1px dashed var(--warn); background: var(--warn-bg); border-radius: 8px; padding: 10px 12px; font-size: .9rem; }
+.ch-rank { list-style: none; margin: 8px 0 0; padding: 0; }
+.ch-rank li { display: grid; grid-template-columns: 2.2em minmax(120px, 220px) 1fr 4.2em; gap: 4px 10px; align-items: center; padding: 5px 4px; border-bottom: 1px solid var(--line); font-size: .88rem; }
+.ch-rank li.me { background: var(--surface2); border-radius: 6px; }
+.ch-rank .pos { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+.ch-rank .nm { overflow-wrap: anywhere; }
+.ch-rank .sc { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ch-rank .evx-track { height: 16px; }
+.ch-rank .marks { display: inline-flex; gap: 4px; margin-left: 6px; }
+.ch-rank .tag { font-size: .7rem; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 0 6px; white-space: nowrap; }
+@media (max-width: 640px) { .ch-rank li { grid-template-columns: 2em 1fr 3.6em; } .ch-rank li .evx-track { grid-column: 1 / -1; } }
+.ch-board-row { display: flex; gap: 10px 22px; flex-wrap: wrap; margin: 4px 0 8px; }
+.ch-stat { min-width: 90px; }
+.ch-stat .v { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.ch-stat .l { font-size: .78rem; color: var(--muted); }
+.ch-link { font: inherit; font-size: .84rem; background: none; border: 0; color: var(--accent); text-decoration: underline; cursor: pointer; padding: 2px 0; min-height: 28px; }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AugPilot - Home</title>
+<meta name="color-scheme" content="light dark">
+</head>
+<body class="home-body">
+{% include '_sitenav.html' %}
+<main class="home" id="main">
+  <h1>Where do you want to start?</h1>
+  <p class="lead">Data augmentation benchmark for tabular data, time series and graphs. Pick the path closest to what you need: you can switch section at any time from the bar at the top.</p>
+  <div class="choices">
+    <a class="choice" href="/copilot"><span class="q">I don't know what to choose</span><p>Describe the problem in a conversation: the assistant recommends datasets and algorithms based on measured results.</p><span class="go">Open the Copilot &rarr;</span></a>
+    <a class="choice" href="/guided"><span class="q">I already know what to do</span><p>Six steps, one at a time: goal, data, algorithms, run, results, explanation.</p><span class="go">Open the Guided path &rarr;</span></a>
+    <a class="choice" href="/catalog"><span class="q">I just want to explore</span><p>Browse and filter all algorithms and datasets, with descriptions and measurements, without running anything.</p><span class="go">Open the Catalog &rarr;</span></a>
+    <a class="choice" href="/control"><span class="q">Overview</span><p>System status, recorded runs and machines, at a glance.</p><span class="go">Open the Control room &rarr;</span></a>
+  </div>
+  <h2>Status</h2>
+  <p class="status" id="home-status" role="status">Checking...</p>
+  <h2>More</h2>
+  <p class="others"><a href="/machines">Machines</a><a href="/assistant">Assistant (simple chat)</a><a href="/classic">Classic dashboard (runner, evaluation, charts, checkpoints)</a></p>
+</main>
+<script src="{{ url_for('static', filename='site/home.js') }}"></script>
+</body>
+</html>

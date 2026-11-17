@@ -1,0 +1,289 @@
+{
+ "block_bootstrap": {
+  "what": "Resamples blocks (T/4) of the same series with replacement.",
+  "good_for": "not documented",
+  "avoid_when": "Inferred from the code: the joins between blocks break continuity.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Kunsch 1989",
+  "verified": false
+ },
+ "dba": {
+  "what": "Weighted DTW barycenter average of 4 series of the same class (Dirichlet weights, 20% band).",
+  "good_for": "Datasets with labels and several series per class.",
+  "avoid_when": "Pure-Python DTW: slow on long series or many samples (from the code). Without labels it uses a single class.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Petitjean et al. 2011",
+  "verified": true
+ },
+ "decomp_bootstrap": {
+  "what": "Moving-average trend + per-phase seasonality (period estimated via ACF) + block-resampled residuals.",
+  "good_for": "Series with clear seasonality (period detected if ACF>0.3).",
+  "avoid_when": "Without clear seasonality the period is 0 and only trend + residuals remain. It is not statsmodels' STL.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Bergmeir et al. 2016",
+  "verified": true
+ },
+ "diffusion-ts": {
+  "what": "Diffusion for time series (Diffusion-TS): the repo's model with minimal Adam+EMA training written in the worker.",
+  "good_for": "not documented",
+  "avoid_when": "Requires GPU. Does not use the repo's solver.py; data scaled to [-1,1].",
+  "source": "modalities/ts/workers/diffusion_ts.py; Algorithms/diffusion-ts; Yuan & Qiao ICLR 2024",
+  "verified": false
+ },
+ "fourier_surrogate": {
+  "what": "Randomizes the phases of the Fourier spectrum while keeping the amplitude; same phases on all channels.",
+  "good_for": "not documented",
+  "avoid_when": "Inferred from the code: preserves only the spectrum, loses non-linear structures and localized peaks.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Theiler et al. 1992",
+  "verified": false
+ },
+ "iaaft": {
+  "what": "IAAFT surrogate: preserves spectrum and value distribution (30 iterations, per channel).",
+  "good_for": "not documented",
+  "avoid_when": "Correlation between channels is not preserved (from the catalog).",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Schreiber & Schmitz 1996",
+  "verified": false
+ },
+ "imagentime": {
+  "what": "Turns the series into images and uses EDM diffusion (ImagenTime).",
+  "good_for": "not documented",
+  "avoid_when": "Requires GPU (.cuda() in the repo); two missing `data.*` modules replaced by stubs. networks.py from NVIDIA EDM is CC BY-NC-SA 4.0 (non-commercial); the repo has no license.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_imagentime.py; Naiman et al. NeurIPS 2024",
+  "verified": false
+ },
+ "jitter": {
+  "what": "Adds Gaussian noise (5% of the channel std) to existing series.",
+  "good_for": "not documented",
+  "avoid_when": "Does not create new structures: the series stays almost the same. No GPU requirement.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Um et al. ICMI 2017",
+  "verified": false
+ },
+ "kovae": {
+  "what": "VAE with a Koopman operator (KoVAE); original model, training rewritten from run_regular.py.",
+  "good_for": "not documented",
+  "avoid_when": "Requires GPU (.cuda() in the repo). The repo has no license: check before redistributing.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_kovae.py; Naiman et al. ICLR 2024",
+  "verified": false
+ },
+ "magnitude_warp": {
+  "what": "Multiplies the series by a smooth curve (4-knot spline, sigma 0.2) around 1.",
+  "good_for": "not documented",
+  "avoid_when": "Changes only the amplitude over time.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Um et al. ICMI 2017",
+  "verified": false
+ },
+ "mixup": {
+  "what": "Convex combination of two series of the same class, lambda ~ Beta(0.4,0.4).",
+  "good_for": "Datasets with class labels.",
+  "avoid_when": "Without labels it treats everything as one class.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Zhang et al. ICLR 2018",
+  "verified": true
+ },
+ "pca": {
+  "what": "Global PCA (95% variance) on the flattened series, scores perturbed with 0.3*std noise, reconstruction.",
+  "good_for": "Datasets with series of equal length (global PCA on the flattened series).",
+  "avoid_when": "Inferred from the code: with few samples the PCA is unreliable.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Jolliffe",
+  "verified": false
+ },
+ "permutation": {
+  "what": "Shuffles 4 segments of the same series.",
+  "good_for": "not documented",
+  "avoid_when": "Inferred from the code: breaks the coarse-grained order, unsuitable if the order of the segments carries information.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Um et al. ICMI 2017",
+  "verified": false
+ },
+ "rgan": {
+  "what": "RGAN/RCGAN: recurrent GANs (Esteban et al.).",
+  "good_for": "not documented",
+  "avoid_when": "DESCRIBED ONLY, not runnable: requires TensorFlow 1.x (tf.contrib).",
+  "source": "modalities/ts/catalog_gen.py; Algorithms/RGAN",
+  "verified": false
+ },
+ "rotation": {
+  "what": "With multiple channels applies a random orthogonal rotation; with one channel it flips (mirror about the mean or time reversal).",
+  "good_for": "not documented",
+  "avoid_when": "Inferred from the code: with D>1 it mixes the channels, unsuitable if they have distinct physical meanings.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Um et al. ICMI 2017",
+  "verified": false
+ },
+ "scaling": {
+  "what": "Multiplies each channel by a factor ~N(1,0.1).",
+  "good_for": "not documented",
+  "avoid_when": "Changes only the amplitude, not the temporal shape.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Um et al. ICMI 2017",
+  "verified": false
+ },
+ "sigcwgan": {
+  "what": "Conditional Sig-Wasserstein GAN: autoregressive generation conditioned on the prefix (3 steps) of a real series.",
+  "good_for": "not documented",
+  "avoid_when": "The prefix is copied from the real series. `signatory` replaced by a torch module written by us. Requires GPU. Repo without a license.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_sigcwgan.py; Ni et al. 2020",
+  "verified": false
+ },
+ "simpsi": {
+  "what": "Spectrum-preserving augmentation (SimPSI); spectral mixing rule rewritten with a magnitude map.",
+  "good_for": "not documented",
+  "avoid_when": "Not the original: equalizer not learned, no classifier. Does not require GPU.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_simpsi.py; Ryu et al. AAAI 2024",
+  "verified": false
+ },
+ "slice_shuffle": {
+  "what": "Recombines 4 segments taken from different series of the same class (CutMix style).",
+  "good_for": "Datasets with class labels: segments are taken from the same class.",
+  "avoid_when": "Without labels it treats everything as a single class.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py",
+  "verified": true
+ },
+ "smote": {
+  "what": "Interpolates a series toward one of the 5 nearest neighbors of the same class.",
+  "good_for": "Oversampling of minority classes in datasets with labels.",
+  "avoid_when": "Euclidean distance on the flattened series: not robust to temporal shifts (from the code). Without labels it uses a single class.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Chawla et al. 2002",
+  "verified": true
+ },
+ "ssa": {
+  "what": "Reduced-rank reconstruction (SSA, 95% energy) plus block-resampled residuals.",
+  "good_for": "not documented",
+  "avoid_when": "The rank is computed on the first channel of the first series and reused for all (code limitation).",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Golyandina & Zhigljavsky 2013",
+  "verified": false
+ },
+ "time_warp": {
+  "what": "Warps the time axis with a smooth, monotonic speed (sigma 0.3).",
+  "good_for": "not documented",
+  "avoid_when": "Inferred from the code, not documented: ruins series with events anchored to precise instants.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Um et al. ICMI 2017",
+  "verified": false
+ },
+ "timegan-orig": {
+  "what": "TimeGAN, original code by Yoon et al.",
+  "good_for": "not documented",
+  "avoid_when": "DESCRIBED ONLY, not runnable: requires TensorFlow 1.15 (tf.contrib), incompatible with Python 3.10. Use tsgm-timegan.",
+  "source": "modalities/ts/catalog_gen.py; Algorithms/TimeGAN",
+  "verified": false
+ },
+ "timevae": {
+  "what": "timeVAE: VAE with a decoder made of trend/seasonality/residual components.",
+  "good_for": "not documented",
+  "avoid_when": "Runs on CPU only (TensorFlow 2.16, env ts_tf; no TF-GPU on native Windows): can be slow on large datasets.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/timevae.py; Algorithms/timeVAE; Desai et al. 2021",
+  "verified": false
+ },
+ "timevae-conv": {
+  "what": "Convolutional VAE (baseline of the timeVAE repo), original TensorFlow code.",
+  "good_for": "not documented",
+  "avoid_when": "Runs on CPU only (TensorFlow 2.16, env ts_tf; no TF-GPU on native Windows): can be slow on large datasets.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/timevae.py; Algorithms/timeVAE; Desai et al. 2021",
+  "verified": false
+ },
+ "timevae-dense": {
+  "what": "Dense VAE (baseline of the timeVAE repo), original TensorFlow code.",
+  "good_for": "not documented",
+  "avoid_when": "Runs on CPU only (TensorFlow 2.16, env ts_tf; no TF-GPU on native Windows): can be slow on large datasets.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/timevae.py; Algorithms/timeVAE; Desai et al. 2021",
+  "verified": false
+ },
+ "timevqvae": {
+  "what": "VQ-VAE + MaskGIT, original code; conditioned on labels if present. Codebook 256 (repo: 1024).",
+  "good_for": "Datasets with labels (conditional generation).",
+  "avoid_when": "Requires GPU.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_timevqvae.py; Lee et al. AISTATS 2023",
+  "verified": true
+ },
+ "tsdiff": {
+  "what": "Unconditional diffusion with an S4 backbone (TSDiff, Amazon).",
+  "good_for": "not documented",
+  "avoid_when": "Univariate: one model per channel, correlations between channels not modeled. S4 without pykeops: slow kernel. Requires GPU.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_tsdiff.py; Kollovieh et al. NeurIPS 2023",
+  "verified": false
+ },
+ "tsgm-betavae": {
+  "what": "Convolutional beta-VAE from tsgm; generates by sampling the latent space.",
+  "good_for": "not documented",
+  "avoid_when": "Requires GPU. Does not use labels.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm; Higgins et al. ICLR 2017",
+  "verified": false
+ },
+ "tsgm-cbetavae": {
+  "what": "Beta-VAE conditioned on the label (tsgm); the output includes the labels.",
+  "good_for": "Datasets with class labels.",
+  "avoid_when": "Error if the .npz has no `labels`. Requires GPU.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm",
+  "verified": true
+ },
+ "tsgm-cgan": {
+  "what": "GAN conditioned on the label (tsgm); the output includes the labels.",
+  "good_for": "Datasets with class labels.",
+  "avoid_when": "Error if the .npz has no `labels`. Requires GPU.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm",
+  "verified": true
+ },
+ "tsgm-ddpm": {
+  "what": "DDPM diffusion model with a convolutional denoiser (tsgm).",
+  "good_for": "not documented",
+  "avoid_when": "Requires GPU; iterative sampling (default timesteps 200).",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm; Ho et al. NeurIPS 2020",
+  "verified": false
+ },
+ "tsgm-gan": {
+  "what": "Unconditional convolutional GAN from the tsgm library; generates series from scratch.",
+  "good_for": "not documented",
+  "avoid_when": "Requires GPU. Does not use labels.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm",
+  "verified": false
+ },
+ "tsgm-timegan": {
+  "what": "TimeGAN from the tsgm library.",
+  "good_for": "not documented",
+  "avoid_when": "With the torch backend it fails (library bug): it only runs on TensorFlow CPU (env ts_tf), without GPU.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm; Yoon et al. NeurIPS 2019",
+  "verified": false
+ },
+ "tsgm-wavegan": {
+  "what": "WaveGAN from tsgm, a GAN for waveforms.",
+  "good_for": "not documented",
+  "avoid_when": "Univariate: the worker trains one model per channel (correlations between channels not modeled). Requires GPU.",
+  "source": "modalities/ts/catalog_gen.py + modalities/ts/workers/tsgm_gen.py; https://github.com/AlexanderVNikitin/tsgm; Donahue et al. ICLR 2019",
+  "verified": false
+ },
+ "uchida-dgw": {
+  "what": "Discriminative guided warping: warping guided by positive and negative prototypes.",
+  "good_for": "Datasets with at least two classes.",
+  "avoid_when": "With a single class there are no negative prototypes and the series stays unchanged.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_uchida.py; Algorithms/time_series_augmentation; Iwana & Uchida PLOS ONE 2021",
+  "verified": true
+ },
+ "uchida-rgw": {
+  "what": "Random guided warping: warps a series according to the DTW alignment toward a prototype of the same class.",
+  "good_for": "Datasets with labels.",
+  "avoid_when": "Same prototype index error as SPAWNER (in the repo). Does not require GPU.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_uchida.py; Algorithms/time_series_augmentation; Iwana & Uchida PLOS ONE 2021",
+  "verified": true
+ },
+ "uchida-spawner": {
+  "what": "SPAWNER: DTW average of series of the same class aligned on a common point (original code).",
+  "good_for": "Datasets with labels.",
+  "avoid_when": "Index error in the repo when choosing the prototype. Without labels it uses a single class. Does not require GPU.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_uchida.py; Algorithms/time_series_augmentation; Iwana & Uchida PLOS ONE 2021",
+  "verified": true
+ },
+ "uchida-wdba": {
+  "what": "Weighted DBA: medoid of 6 series of the class with exponential weights on the DTW distances.",
+  "good_for": "Datasets with labels.",
+  "avoid_when": "Different from the classic `dba` (Dirichlet weights). Does not require GPU.",
+  "source": "modalities/ts/catalog_ext.py + modalities/ts/workers/ext_uchida.py; Algorithms/time_series_augmentation; Iwana & Uchida PLOS ONE 2021",
+  "verified": true
+ },
+ "window_slice": {
+  "what": "Crops a 90% window and stretches it back to the original length.",
+  "good_for": "not documented",
+  "avoid_when": "With very short series the window is only a few points; the stretching interpolates.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Le Guennec et al. 2016",
+  "verified": false
+ },
+ "window_warp": {
+  "what": "Compresses (x0.5) or expands (x2) a 10% window and brings the series back to the original length.",
+  "good_for": "not documented",
+  "avoid_when": "With very short series the window is minimal.",
+  "source": "modalities/ts/workers/classic.py + modalities/ts/catalog_classic.py; Le Guennec et al. 2016",
+  "verified": false
+ }
+}

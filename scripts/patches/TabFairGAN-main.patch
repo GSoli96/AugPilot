@@ -1,0 +1,28 @@
+diff --git a/src/tabfairgan/utils.py b/src/tabfairgan/utils.py
+index e4d7de4..b586315 100644
+--- a/src/tabfairgan/utils.py
++++ b/src/tabfairgan/utils.py
+@@ -106,13 +106,17 @@ def get_original_data(
+     ohe: OneHotEncoder, 
+     scaler: QuantileTransformer
+ ) -> pd.DataFrame:
+-    df_ohe_int = df_transformed[:, :df_orig.select_dtypes(['float', 'integer']).shape[1]]
++    num_cols = df_orig.select_dtypes(['float', 'integer']).columns
++    cat_cols = df_orig.select_dtypes('object').columns
++    df_ohe_int = df_transformed[:, :len(num_cols)]
+     df_ohe_int = scaler.inverse_transform(df_ohe_int)
+-    df_ohe_cats = df_transformed[:, df_orig.select_dtypes(['float', 'integer']).shape[1]:]
+-    df_ohe_cats = ohe.inverse_transform(df_ohe_cats)
+-    df_int = pd.DataFrame(df_ohe_int, columns=df_orig.select_dtypes(['float', 'integer']).columns)
+-    df_cat = pd.DataFrame(df_ohe_cats, columns=df_orig.select_dtypes('object').columns)
+-    return pd.concat([df_int, df_cat], axis=1)
++    df_int = pd.DataFrame(df_ohe_int, columns=num_cols)
++    if len(cat_cols) > 0:
++        df_ohe_cats = df_transformed[:, len(num_cols):]
++        df_ohe_cats = ohe.inverse_transform(df_ohe_cats)
++        df_cat = pd.DataFrame(df_ohe_cats, columns=cat_cols)
++        return pd.concat([df_int, df_cat], axis=1)
++    return df_int
+ 
+ 
+ #def prepare_data_fair(df, batch_size, S, Y, S_under, Y_desire):

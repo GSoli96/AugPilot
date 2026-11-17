@@ -1,0 +1,331 @@
+{
+ "amazon-photo": {
+  "stats": {
+   "level": "node",
+   "n_nodes": 7650,
+   "n_edges": 238162,
+   "n_features": 745,
+   "avg_degree": 31.13,
+   "n_train": 160,
+   "n_val": 240,
+   "n_test": 7250,
+   "n_classes": 8,
+   "class_distribution": {
+    "0": 369,
+    "1": 1686,
+    "2": 703,
+    "3": 915,
+    "4": 882,
+    "5": 823,
+    "6": 1941,
+    "7": 331
+   },
+   "imbalance_ratio": 5.86,
+   "class_distribution_train": {
+    "0": 20,
+    "1": 20,
+    "2": 20,
+    "3": 20,
+    "4": 20,
+    "5": 20,
+    "6": 20,
+    "7": 20
+   },
+   "imbalance_ratio_train": 1.0
+  },
+  "uses": "Node level, 8 classes, balanced (ratio 1.0, on train). Balanced: control with no imbalance. Origin: Amazon, split with 20/30 nodes per class in train/val.",
+  "source": "script (datasets_graph/amazon-photo.pt); modalities/graph/datasets.py"
+ },
+ "citeseer": {
+  "stats": {
+   "level": "node",
+   "n_nodes": 3327,
+   "n_edges": 9104,
+   "n_features": 3703,
+   "avg_degree": 2.74,
+   "n_train": 120,
+   "n_val": 500,
+   "n_test": 1000,
+   "n_classes": 6,
+   "class_distribution": {
+    "0": 264,
+    "1": 590,
+    "2": 668,
+    "3": 701,
+    "4": 596,
+    "5": 508
+   },
+   "imbalance_ratio": 2.66,
+   "class_distribution_train": {
+    "0": 20,
+    "1": 20,
+    "2": 20,
+    "3": 20,
+    "4": 20,
+    "5": 20
+   },
+   "imbalance_ratio_train": 1.0
+  },
+  "uses": "Node level, 6 classes, balanced (ratio 1.0, on train). Balanced: control with no imbalance. Origin: Planetoid.",
+  "source": "script (datasets_graph/citeseer.pt); modalities/graph/datasets.py"
+ },
+ "cora": {
+  "stats": {
+   "level": "node",
+   "n_nodes": 2708,
+   "n_edges": 10556,
+   "n_features": 1433,
+   "avg_degree": 3.9,
+   "n_train": 140,
+   "n_val": 500,
+   "n_test": 1000,
+   "n_classes": 7,
+   "class_distribution": {
+    "0": 351,
+    "1": 217,
+    "2": 418,
+    "3": 818,
+    "4": 426,
+    "5": 298,
+    "6": 180
+   },
+   "imbalance_ratio": 4.54,
+   "class_distribution_train": {
+    "0": 20,
+    "1": 20,
+    "2": 20,
+    "3": 20,
+    "4": 20,
+    "5": 20,
+    "6": 20
+   },
+   "imbalance_ratio_train": 1.0
+  },
+  "uses": "Node level, 7 classes, balanced (ratio 1.0, on train). Balanced: control with no imbalance. Origin: Planetoid.",
+  "source": "script (datasets_graph/cora.pt); modalities/graph/datasets.py"
+ },
+ "cora_imb": {
+  "stats": {
+   "level": "node",
+   "n_nodes": 2708,
+   "n_edges": 10556,
+   "n_features": 1433,
+   "avg_degree": 3.9,
+   "n_train": 74,
+   "n_val": 500,
+   "n_test": 1000,
+   "n_classes": 7,
+   "class_distribution": {
+    "0": 351,
+    "1": 217,
+    "2": 418,
+    "3": 818,
+    "4": 426,
+    "5": 298,
+    "6": 180
+   },
+   "imbalance_ratio": 4.54,
+   "class_distribution_train": {
+    "0": 20,
+    "1": 16,
+    "2": 12,
+    "3": 9,
+    "4": 7,
+    "5": 6,
+    "6": 4
+   },
+   "imbalance_ratio_train": 5.0
+  },
+  "uses": "Node level, 7 classes, imbalanced (ratio 5.0, on train). Imbalanced variant for trying oversampling (RHO=0.2, from modalities/graph/datasets.py). Origin: Planetoid.",
+  "source": "script (datasets_graph/cora_imb.pt); modalities/graph/datasets.py"
+ },
+ "enzymes": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 600,
+   "n_features": 21,
+   "avg_nodes": 32.6,
+   "avg_edges": 124.3,
+   "max_nodes": 126,
+   "n_classes": 6,
+   "class_distribution": {
+    "0": 100,
+    "1": 100,
+    "2": 100,
+    "3": 100,
+    "4": 100,
+    "5": 100
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Graph level, 6 classes, balanced (ratio 1.0). Balanced: control with no imbalance. Origin: TUDataset.",
+  "source": "script (datasets_graph/enzymes.pt); modalities/graph/datasets.py"
+ },
+ "enzymes_imb": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 311,
+   "n_features": 21,
+   "avg_nodes": 33.5,
+   "avg_edges": 126.1,
+   "max_nodes": 126,
+   "n_classes": 6,
+   "class_distribution": {
+    "0": 100,
+    "1": 72,
+    "2": 53,
+    "3": 38,
+    "4": 28,
+    "5": 20
+   },
+   "imbalance_ratio": 5.0
+  },
+  "uses": "Graph level, 6 classes, imbalanced (ratio 5.0). Imbalanced variant for trying oversampling (RHO=0.2, from modalities/graph/datasets.py). Origin: TUDataset.",
+  "source": "script (datasets_graph/enzymes_imb.pt); modalities/graph/datasets.py"
+ },
+ "imdb-binary": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 1000,
+   "n_features": 1,
+   "avg_nodes": 19.8,
+   "avg_edges": 193.1,
+   "max_nodes": 136,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 500,
+    "1": 500
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Graph level, 2 classes, balanced (ratio 1.0). Balanced: control with no imbalance. Origin: TUDataset (x = 1).",
+  "source": "script (datasets_graph/imdb-binary.pt); modalities/graph/datasets.py"
+ },
+ "imdb-binary_imb": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 600,
+   "n_features": 1,
+   "avg_nodes": 20.3,
+   "avg_edges": 200.2,
+   "max_nodes": 136,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 500,
+    "1": 100
+   },
+   "imbalance_ratio": 5.0
+  },
+  "uses": "Graph level, 2 classes, imbalanced (ratio 5.0). Imbalanced variant for trying oversampling (RHO=0.2, from modalities/graph/datasets.py). Origin: TUDataset (x = 1).",
+  "source": "script (datasets_graph/imdb-binary_imb.pt); modalities/graph/datasets.py"
+ },
+ "imdb-multi": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 1500,
+   "n_features": 1,
+   "avg_nodes": 13.0,
+   "avg_edges": 131.9,
+   "max_nodes": 89,
+   "n_classes": 3,
+   "class_distribution": {
+    "0": 500,
+    "1": 500,
+    "2": 500
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Graph level, 3 classes, balanced (ratio 1.0). Balanced: control with no imbalance. Origin: TUDataset (x = 1).",
+  "source": "script (datasets_graph/imdb-multi.pt); modalities/graph/datasets.py"
+ },
+ "mutag": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 188,
+   "n_features": 7,
+   "avg_nodes": 17.9,
+   "avg_edges": 39.6,
+   "max_nodes": 28,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 63,
+    "1": 125
+   },
+   "imbalance_ratio": 1.98
+  },
+  "uses": "Graph level, 2 classes, imbalanced (ratio 1.98). Natural imbalance: suited to testing oversampling. Origin: TUDataset.",
+  "source": "script (datasets_graph/mutag.pt); modalities/graph/datasets.py"
+ },
+ "mutag_imb": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 138,
+   "n_features": 7,
+   "avg_nodes": 19.3,
+   "avg_edges": 43.2,
+   "max_nodes": 28,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 13,
+    "1": 125
+   },
+   "imbalance_ratio": 9.62
+  },
+  "uses": "Graph level, 2 classes, highly imbalanced (ratio 9.62). Imbalanced variant for trying oversampling (RHO=0.2, from modalities/graph/datasets.py). Origin: TUDataset.",
+  "source": "script (datasets_graph/mutag_imb.pt); modalities/graph/datasets.py"
+ },
+ "nci1": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 4110,
+   "n_features": 37,
+   "avg_nodes": 29.9,
+   "avg_edges": 64.6,
+   "max_nodes": 111,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 2053,
+    "1": 2057
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Graph level, 2 classes, balanced (ratio 1.0). Balanced: control with no imbalance. Origin: TUDataset.",
+  "source": "script (datasets_graph/nci1.pt); modalities/graph/datasets.py"
+ },
+ "proteins": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 1113,
+   "n_features": 4,
+   "avg_nodes": 39.1,
+   "avg_edges": 145.6,
+   "max_nodes": 620,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 663,
+    "1": 450
+   },
+   "imbalance_ratio": 1.47
+  },
+  "uses": "Graph level, 2 classes, balanced (ratio 1.47). Balanced: control with no imbalance. Origin: TUDataset.",
+  "source": "script (datasets_graph/proteins.pt); modalities/graph/datasets.py"
+ },
+ "ptc_mr": {
+  "stats": {
+   "level": "graph",
+   "n_graphs": 344,
+   "n_features": 18,
+   "avg_nodes": 14.3,
+   "avg_edges": 29.4,
+   "max_nodes": 64,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 192,
+    "1": 152
+   },
+   "imbalance_ratio": 1.26
+  },
+  "uses": "Graph level, 2 classes, balanced (ratio 1.26). Balanced: control with no imbalance. Origin: TUDataset.",
+  "source": "script (datasets_graph/ptc_mr.pt); modalities/graph/datasets.py"
+ }
+}

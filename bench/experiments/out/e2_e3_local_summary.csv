@@ -1,0 +1,5 @@
+model,condition,backend,n,completed,errors,numbers,ungrounded,grounded_pct,expected_tools_hit,latency_mean_s,tokens_mean
+gpt-oss:120b,notools,local,15,15,0,1419,364,74.3,,43.0,3178
+gpt-oss:120b,tools,local,15,14,0,113,11,90.3,0.333,13.0,12963
+gpt-oss:20b,notools,local,15,14,0,759,165,78.3,,22.5,2667
+gpt-oss:20b,tools,local,15,15,0,92,1,98.9,0.4,10.5,10855

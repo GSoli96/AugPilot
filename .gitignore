@@ -1,0 +1,28 @@
+# Third-party algorithm code (download with scripts/fetch_algorithms.py)
+Algorithms/*
+!Algorithms/Algorithms.md
+!Algorithms/smote_augmentation.py
+
+# Datasets and generated data (not redistributed)
+datasets/*
+!datasets/iris0_min.csv
+datasets_full/
+datasets_ts/
+datasets_graph/
+datasets_user*/
+augmented_*/
+evaluation_metrics*/
+runtime_results*/
+Saved/
+checkpoint*/
+LLM_raw/
+tmp/
+
+# Environments, caches, logs
+envs/
+__pycache__/
+*.pyc
+*.log
+
+# Lab machines (addresses, users)
+distributed/machines.json

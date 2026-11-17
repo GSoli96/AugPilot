@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalog explorer</title>
+<meta name="description" content="Filterable gallery of all algorithms (tabular, time series, graphs), side-by-side comparison with measured results, algorithm-by-dataset matrix and a floating assistant that filters and selects for you.">
+<link rel="stylesheet" href="{{ url_for('static', filename='catalog/catalog.css') }}">
+</head>
+<body>
+{% include '_sitenav.html' %}
+<a class="sr" href="#main">Skip to content</a>
+<header class="top">
+  <h1>Catalog explorer</h1>
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" role="tab" id="tab-catalog" aria-controls="view-catalog" aria-selected="true" data-view="catalog">Catalog <span class="cnt" id="cnt-visible">0</span></button>
+    <button class="tab" role="tab" id="tab-datasets" aria-controls="view-datasets" aria-selected="false" data-view="datasets">Dataset <span class="cnt" id="cnt-ds">0</span></button>
+    <button class="tab" role="tab" id="tab-compare" aria-controls="view-compare" aria-selected="false" data-view="compare">Compare <span class="cnt" id="cnt-sel">0</span></button>
+    <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false" data-view="matrix">Matrix</button>
+    <button class="tab" role="tab" id="tab-run" aria-controls="view-run" aria-selected="false" data-view="run">Run</button>
+  </div>
+  <span class="sp"></span>
+</header>
+
+<main id="main" tabindex="-1">
+  <div id="load-banner" class="banner" role="status" hidden></div>
+
+  <section class="view" id="view-catalog" role="tabpanel" aria-labelledby="tab-catalog">
+    <div class="cat">
+      <aside class="facets" aria-label="Faceted filters">
+        <details id="facet-wrap" open>
+          <summary>Filters</summary>
+          <form id="facets" onsubmit="return false">
+            <label class="sr" for="f-q">Search by name, strategy, paper</label>
+            <input type="search" id="f-q" placeholder="Search name, strategy, paper" autocomplete="off">
+            <fieldset><legend>Modality</legend><div id="fx-mod"></div></fieldset>
+            <fieldset><legend>Status</legend><div id="fx-status"></div>
+              <p class="note">executable = can be started from here; wired = connected but not startable; described = description only.</p></fieldset>
+            <fieldset><legend>Strategy</legend><div class="scroll" id="fx-strat"></div></fieldset>
+            <fieldset><legend>GPU</legend><div id="fx-gpu"></div>
+              <p class="note">Tabular algorithms do not declare a GPU requirement (n/a): they are hidden when a GPU filter is active.</p></fieldset>
+            <fieldset><legend>License</legend><div id="fx-lic"></div>
+              <p class="note">Heuristic classification based on the text of the license field: always check the source before citing it.</p></fieldset>
+            <fieldset><legend>Task</legend><div id="fx-task"></div></fieldset>
+            <fieldset><legend>Measurements</legend>
+              <label><input type="checkbox" id="f-res"> Only with measured results</label></fieldset>
+            <div class="rowbtn"><button type="button" class="btn sm" id="f-reset">Reset filters</button></div>
+          </form>
+        </details>
+      </aside>
+      <div>
+        <div class="toolbar">
+          <h2 id="cat-title">Algorithms</h2>
+          <button class="btn sm" id="sel-visible" type="button">Select visible (max 12)</button>
+          <button class="btn sm" id="sel-none" type="button">Deselect all</button>
+          <span class="note" id="cat-note"></span>
+        </div>
+        <div class="grid" id="grid" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-datasets" role="tabpanel" aria-labelledby="tab-datasets" hidden></section>
+  <section class="view" id="view-compare" role="tabpanel" aria-labelledby="tab-compare" hidden></section>
+  <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden></section>
+  <section class="view" id="view-run" role="tabpanel" aria-labelledby="tab-run" hidden></section>
+</main>
+
+<div class="tray" id="tray" hidden role="region" aria-label="Selection">
+  <strong id="tray-n"></strong><span class="note" id="tray-msg" role="status"></span>
+  <button class="btn sm primary" id="tray-guided" type="button" title="Opens the Guided path with modality, dataset and algorithms already chosen">Send to Guided path</button>
+  <button class="btn sm primary" id="tray-copilot" type="button" title="Opens the Copilot with a first message that mentions the selection">Send to Copilot</button>
+  <button class="btn sm" id="tray-cmp" type="button">Compare</button>
+  <button class="btn sm" id="tray-run" type="button">Run here</button>
+  <button class="btn sm" id="tray-clear" type="button">Clear</button>
+</div>
+
+<aside class="assistant min" id="assistant" aria-label="Assistant">
+  <div class="a-head">
+    <span class="dot" id="a-dot" aria-hidden="true"></span>
+    <strong>Assistant</strong>
+    <button type="button" id="a-toggle" aria-expanded="false" aria-controls="a-body">Open</button>
+  </div>
+  <div class="a-body" id="a-body">
+    <div class="a-state" id="a-state" role="status">Checking status...</div>
+    <div class="chips" id="a-chips" role="group" aria-label="Shortcuts"></div>
+    <div id="a-log" role="log" aria-live="polite" aria-label="Conversation"></div>
+    <div class="a-form">
+      <label class="sr" for="a-input">Write to the assistant</label>
+      <textarea id="a-input" rows="2" placeholder="e.g. show me the generative ones without a problematic license"></textarea>
+      <button type="button" class="btn primary" id="a-send">Send</button>
+    </div>
+  </div>
+</aside>
+
+<dialog id="dlg" aria-labelledby="dlg-t">
+  <h2 id="dlg-t" style="margin:0 0 8px;font-size:1.1rem">Confirm launch</h2>
+  <div id="dlg-body"></div>
+  <menu>
+    <button type="button" class="btn" id="dlg-no">Cancel</button>
+    <button type="button" class="btn primary" id="dlg-ok">Confirm and launch</button>
+  </menu>
+</dialog>
+
+{% include '_md_scripts.html' %}
+<script src="{{ url_for('static', filename='js/assistant_chat.js') }}"></script>
+<script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+<script src="{{ url_for('static', filename='catalog/catalog.js') }}"></script>
+</body>
+</html>

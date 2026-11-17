@@ -1,0 +1,154 @@
+{
+ "cbf": {
+  "stats": {
+   "n_series": 300,
+   "length_T": 64,
+   "dims_D": 1,
+   "has_labels": true,
+   "value_min": 0.0,
+   "value_max": 1.0,
+   "n_classes": 3,
+   "class_distribution": {
+    "0": 100,
+    "1": 100,
+    "2": 100
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "1 channel, T=64: univariate. With labels (3 classes, balanced): suited to evaluating class-conditional generation. Origin: generated Cylinder-Bell-Funnel, 3 classes.",
+  "source": "script (datasets_ts/cbf.npz); modalities/ts/datasets.py"
+ },
+ "energy": {
+  "stats": {
+   "n_series": 1000,
+   "length_T": 24,
+   "dims_D": 28,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "28 channels, T=24: multivariate. No labels: unconditional generation only. Origin: T=24 windows from Algorithms/TimeGAN/data/energy_data.csv, at most 1000 windows.",
+  "source": "script (datasets_ts/energy.npz); modalities/ts/datasets.py"
+ },
+ "energy_full": {
+  "stats": {
+   "n_series": 19712,
+   "length_T": 24,
+   "dims_D": 28,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "28 channels, T=24: multivariate. No labels: unconditional generation only. Origin: like energy but with all windows (long).",
+  "source": "script (datasets_ts/energy_full.npz); modalities/ts/datasets.py"
+ },
+ "sine_cls": {
+  "stats": {
+   "n_series": 300,
+   "length_T": 48,
+   "dims_D": 3,
+   "has_labels": true,
+   "value_min": 0.0161,
+   "value_max": 0.9961,
+   "n_classes": 3,
+   "class_distribution": {
+    "0": 100,
+    "1": 100,
+    "2": 100
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "3 channels, T=48: multivariate. With labels (3 classes, balanced): suited to evaluating class-conditional generation. Origin: generated multichannel sinusoids, 3 classes by frequency.",
+  "source": "script (datasets_ts/sine_cls.npz); modalities/ts/datasets.py"
+ },
+ "sine_small": {
+  "stats": {
+   "n_series": 256,
+   "length_T": 24,
+   "dims_D": 5,
+   "has_labels": true,
+   "value_min": 0.0,
+   "value_max": 1.0,
+   "n_classes": 2,
+   "class_distribution": {
+    "0": 118,
+    "1": 138
+   },
+   "imbalance_ratio": 1.17
+  },
+  "uses": "5 channels, T=24: multivariate. With labels (2 classes, balanced): suited to evaluating class-conditional generation. Origin: synthetic sinusoids, 2 classes by mean frequency.",
+  "source": "script (datasets_ts/sine_small.npz); modalities/ts/datasets.py"
+ },
+ "stock": {
+  "stats": {
+   "n_series": 1000,
+   "length_T": 24,
+   "dims_D": 6,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "6 channels, T=24: multivariate. No labels: unconditional generation only. Origin: T=24 windows from Algorithms/TimeGAN/data/stock_data.csv, at most 1000 windows.",
+  "source": "script (datasets_ts/stock.npz); modalities/ts/datasets.py"
+ },
+ "stock_full": {
+  "stats": {
+   "n_series": 3662,
+   "length_T": 24,
+   "dims_D": 6,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "6 channels, T=24: multivariate. No labels: unconditional generation only. Origin: like stock but with all windows (long).",
+  "source": "script (datasets_ts/stock_full.npz); modalities/ts/datasets.py"
+ },
+ "tv_air": {
+  "stats": {
+   "n_series": 1000,
+   "length_T": 24,
+   "dims_D": 13,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "13 channels, T=24: multivariate. No labels: unconditional generation only. Origin: from Algorithms/timeVAE/data (air), per-channel MinMax, at most 1000 windows.",
+  "source": "script (datasets_ts/tv_air.npz); modalities/ts/datasets.py"
+ },
+ "tv_energy": {
+  "stats": {
+   "n_series": 1000,
+   "length_T": 24,
+   "dims_D": 28,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "28 channels, T=24: multivariate. No labels: unconditional generation only. Origin: from Algorithms/timeVAE/data (energy), per-channel MinMax, at most 1000 windows.",
+  "source": "script (datasets_ts/tv_energy.npz); modalities/ts/datasets.py"
+ },
+ "tv_sine": {
+  "stats": {
+   "n_series": 1000,
+   "length_T": 24,
+   "dims_D": 5,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "5 channels, T=24: multivariate. No labels: unconditional generation only. Origin: from Algorithms/timeVAE/data (sine), per-channel MinMax, at most 1000 windows.",
+  "source": "script (datasets_ts/tv_sine.npz); modalities/ts/datasets.py"
+ },
+ "tv_stock": {
+  "stats": {
+   "n_series": 1000,
+   "length_T": 24,
+   "dims_D": 6,
+   "has_labels": false,
+   "value_min": 0.0,
+   "value_max": 1.0
+  },
+  "uses": "6 channels, T=24: multivariate. No labels: unconditional generation only. Origin: from Algorithms/timeVAE/data (stock), per-channel MinMax, at most 1000 windows.",
+  "source": "script (datasets_ts/tv_stock.npz); modalities/ts/datasets.py"
+ }
+}

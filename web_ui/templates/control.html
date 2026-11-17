@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control room</title>
+<meta name="description" content="Page focused on runs and machines: status strip at the top, outcomes table in the center, new run on the left and assistant console at the bottom.">
+<link rel="stylesheet" href="{{ url_for('static', filename='control/control.css') }}">
+</head>
+<body>
+{% include '_sitenav.html' %}
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="strip" aria-label="System status">
+  <div class="brand"><b>Control room</b></div>
+  <dl class="cells" id="cells" aria-live="polite">
+    <div class="cell" id="c-local"><dt>This computer</dt><dd>Loading...</dd></div>
+    <div class="cell" id="c-remote"><dt>Remote machines</dt><dd>Loading...</dd></div>
+    <div class="cell" id="c-run"><dt>Running</dt><dd>Loading...</dd></div>
+    <div class="cell" id="c-queue"><dt>Queue</dt><dd>No queue: one task at a time</dd></div>
+    <div class="cell" id="c-out"><dt>Recorded outcomes</dt><dd>Loading...</dd></div>
+    <div class="cell" id="c-ai"><dt>Assistant</dt><dd>Checking...</dd></div>
+  </dl>
+</header>
+
+<div class="layout">
+  <aside class="newrun" aria-labelledby="h-new">
+    <h2 id="h-new">New run</h2>
+    <p class="hint">Choose modality, algorithms and dataset. The assistant can recommend algorithms for the chosen dataset.</p>
+    <form id="run-form" autocomplete="off">
+      <fieldset>
+        <legend>1. Modality</legend>
+        <div class="seg" id="f-mod" role="radiogroup" aria-label="Modality"></div>
+      </fieldset>
+      <fieldset>
+        <legend>2. Dataset</legend>
+        <select id="f-ds" aria-label="Dataset"></select>
+        <button type="button" class="btn small" id="f-advise">Ask the assistant for advice</button>
+      </fieldset>
+      <fieldset>
+        <legend>3. Algorithms <span id="f-nalg" class="muted"></span></legend>
+        <input type="search" id="f-q" placeholder="Filter by name" aria-label="Filter algorithms">
+        <div class="checks" id="f-algs" role="group" aria-label="Startable algorithms"></div>
+      </fieldset>
+      <fieldset>
+        <legend>4. Parameters</legend>
+        <div class="grid2">
+          <label>Epochs<input type="number" id="f-ep" min="1" max="5000" value="5"></label>
+          <label>Device<select id="f-dev"><option value="cpu">cpu</option><option value="cuda">cuda (GPU)</option></select></label>
+          <label>Samples (opt.)<input type="number" id="f-ns" min="1" placeholder="auto"></label>
+        </div>
+      </fieldset>
+      <p class="plan" id="f-plan" aria-live="polite"></p>
+      <button type="submit" class="btn primary" id="f-go">Launch</button>
+      <p class="hint">When needed (more algorithms, more epochs) the assistant asks for confirmation in the console before starting the computation. The run starts on this computer.</p>
+    </form>
+  </aside>
+
+  <main id="main" class="center">
+    <div class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" id="t-runs" aria-selected="true" aria-controls="p-runs">Runs</button>
+      <button role="tab" id="t-mach" aria-selected="false" aria-controls="p-mach" tabindex="-1">Machines</button>
+    </div>
+
+    <section id="p-runs" role="tabpanel" aria-labelledby="t-runs">
+      <div class="filters">
+        <div class="seg" id="r-mod" role="group" aria-label="Filter by modality"></div>
+        <label>Outcome
+          <select id="r-st"><option value="">All</option><option>SUCCESS</option><option>FALLBACK</option><option>FAILED</option></select>
+        </label>
+        <label>Search<input type="search" id="r-q" placeholder="algorithm or dataset"></label>
+        <button class="btn small" id="r-refresh" type="button">Refresh</button>
+      </div>
+      <p class="hint" id="r-info"></p>
+      <div id="tasks" class="tasks" aria-live="polite"></div>
+      <div class="tablewrap">
+        <table id="r-table">
+          <caption class="sr">Recorded runs, most recent first. The bar shows time on a logarithmic scale.</caption>
+          <thead><tr><th scope="col">When</th><th scope="col">Modality</th><th scope="col">Algorithm</th><th scope="col">Dataset</th><th scope="col">Outcome</th><th scope="col">Time</th></tr></thead>
+          <tbody id="r-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="p-mach" role="tabpanel" aria-labelledby="t-mach" hidden>
+      <div class="warn" role="note"><b>Automatic load assignment: not available yet.</b>
+        Machines are registered and checked here; no scheduler distributes runs. Every run currently starts on this computer.</div>
+      <div id="m-list" class="mlist"></div>
+      <details class="addm">
+        <summary>Add a machine</summary>
+        <form id="m-form" autocomplete="off">
+          <div class="grid2">
+            <label>Name<input name="name" required maxlength="60"></label>
+            <label>Host or IP<input name="host" required></label>
+            <label>Port<input name="port" type="number" min="1" max="65535" value="22"></label>
+            <label>User<input name="user" required></label>
+            <label>Authentication<select name="auth_method"><option value="agent">SSH agent</option><option value="key">key (path)</option></select></label>
+            <label>Key path<input name="key_path" placeholder="only for key authentication"></label>
+            <label>System<select name="os"><option>linux</option><option>windows</option><option>macos</option><option value="altro">other</option></select></label>
+            <label>GPU (count)<input name="gpu_count" type="number" min="0" value="0"></label>
+            <label>GPU model<input name="gpu_model"></label>
+            <label>RAM (GB)<input name="ram_gb" type="number" min="0" step="any"></label>
+            <label class="wide">Working directory<input name="workdir"></label>
+          </div>
+          <p class="hint">Only the key path is saved, never passwords or key contents.</p>
+          <button class="btn primary" type="submit">Save machine</button>
+          <span id="m-msg" role="status"></span>
+        </form>
+      </details>
+    </section>
+  </main>
+</div>
+
+<section class="console" aria-labelledby="h-con">
+  <div class="conbar">
+    <h2 id="h-con">Assistant</h2>
+    <span id="con-mode" class="pill">checking...</span>
+    <div class="chips" id="chips"></div>
+    <button class="btn small" id="con-reset" type="button">New session</button>
+    <button class="btn small" id="con-size" type="button" aria-pressed="false">Enlarge</button>
+  </div>
+  <div id="con-log" class="conlog" role="log" aria-live="polite" tabindex="0" aria-label="Conversation with the assistant"></div>
+  <form id="con-form" class="conin">
+    <label class="sr" for="con-inp">Write to the assistant</label>
+    <span aria-hidden="true" class="prompt">&gt;</span>
+    <input id="con-inp" autocomplete="off" placeholder="Type here, or use the buttons above">
+    <button class="btn primary" type="submit" id="con-send">Send</button>
+  </form>
+</section>
+
+<script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+<script src="{{ url_for('static', filename='control/control.js') }}"></script>
+</body>
+</html>

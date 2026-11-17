@@ -1,0 +1,317 @@
+{
+ "gmixup": {
+  "what": "Estimates one graphon per class (USVT), interpolates them and samples new graphs.",
+  "good_for": "Graph level: oversampling of classes of whole graphs (e.g. MUTAG-like datasets).",
+  "avoid_when": "Graphs with more than 200 nodes: only the 200 highest-degree nodes are used for the estimate. Repo without a license.",
+  "source": "modalities/graph/workers/gl_gmixup.py; Algorithms/g-mixup; catalog_graph.py",
+  "verified": true
+ },
+ "ifmixup": {
+  "what": "Interpolates adjacency and features of two graphs padded to the same size, then samples the edges.",
+  "good_for": "Graph level: oversampling of whole graphs whose nodes are already in a consistent order.",
+  "avoid_when": "No node alignment between the two graphs: the interpolation may have no structural meaning. Authors/year not verified.",
+  "source": "modalities/graph/workers/gl_mixup.py; catalog_graph.py",
+  "verified": true
+ },
+ "smote_graph": {
+  "what": "SMOTE on whole graphs: interpolates two neighboring graphs of the same class after ordering the nodes by degree.",
+  "good_for": "Graph level: oversampling of minority classes of graphs.",
+  "avoid_when": "Not a published method as such (our application of the SMOTE idea); alignment by degree only.",
+  "source": "modalities/graph/workers/gl_mixup.py; catalog_graph.py",
+  "verified": true
+ },
+ "ros_graph": {
+  "what": "Exact copy of training graphs of the target class.",
+  "good_for": "Graph level: reference baseline for oversampling.",
+  "avoid_when": "No new variability: it only duplicates.",
+  "source": "modalities/graph/workers/gl_mixup.py; catalog_graph.py",
+  "verified": true
+ },
+ "smixup": {
+  "what": "Graph mixup with soft node alignment through a matching network (GMNet) trained with triplet loss.",
+  "good_for": "Graph level: oversampling of graphs with different structure across examples (learned alignment).",
+  "avoid_when": "Requires GPU. GPL-3.0 license (DIG): to be assessed for distribution. Label = target class, not a loss mixup.",
+  "source": "modalities/graph/workers/gl_smixup.py; Algorithms/DIG; catalog_graph.py",
+  "verified": true
+ },
+ "sbm": {
+  "what": "Estimates a stochastic block model from a donor graph (spectral clustering) and samples a new one.",
+  "good_for": "Graph level: graphs with community structure; features are copied from the donor.",
+  "avoid_when": "Captures only block structure, not fine motifs; features are not generated.",
+  "source": "modalities/graph/workers/gl_gen.py; catalog_graph.py",
+  "verified": true
+ },
+ "graphvae": {
+  "what": "Conditional VAE (MLP) on the degree-ordered adjacency, without graph matching.",
+  "good_for": "Graph level: generation of small graphs.",
+  "avoid_when": "At most 64 nodes (larger graphs are truncated). With few epochs it is only a smoke test. Requires GPU.",
+  "source": "modalities/graph/workers/gl_gen.py; catalog_graph.py",
+  "verified": true
+ },
+ "flag": {
+  "what": "Adversarial examples of the node features (PGD on a trained GIN), structure and label unchanged.",
+  "good_for": "Graph level: augmentation by feature perturbation.",
+  "avoid_when": "Node features are required. Static output, not the per-step perturbation as in the paper. Requires GPU.",
+  "source": "modalities/graph/workers/gl_flag.py; Algorithms/FLAG; catalog_graph.py",
+  "verified": true
+ },
+ "graphcl_dnodes": {
+  "what": "GraphCL perturbation: deletes nodes (10 %); the deleted nodes remain isolated.",
+  "good_for": "Graph level: perturbed view of a training graph of the target class.",
+  "avoid_when": "Fixed perturbation ratios, not adjustable.",
+  "source": "modalities/graph/workers/gl_graphcl.py; Algorithms/GraphCL",
+  "verified": true
+ },
+ "graphcl_pedges": {
+  "what": "GraphCL perturbation: removes 10 % of the edges (does not add any).",
+  "good_for": "Graph level: perturbed view of a training graph of the target class.",
+  "avoid_when": "Fixed perturbation ratios, not adjustable.",
+  "source": "modalities/graph/workers/gl_graphcl.py; Algorithms/GraphCL",
+  "verified": true
+ },
+ "graphcl_subgraph": {
+  "what": "GraphCL perturbation: keeps a subgraph (20 % of the nodes).",
+  "good_for": "Graph level: perturbed view of a training graph of the target class.",
+  "avoid_when": "Fixed perturbation ratios, not adjustable.",
+  "source": "modalities/graph/workers/gl_graphcl.py; Algorithms/GraphCL",
+  "verified": true
+ },
+ "graphcl_maskn": {
+  "what": "GraphCL perturbation: masks 10 % of the node features.",
+  "good_for": "Graph level: perturbed view of a training graph of the target class.",
+  "avoid_when": "Fixed perturbation ratios, not adjustable.",
+  "source": "modalities/graph/workers/gl_graphcl.py; Algorithms/GraphCL",
+  "verified": true
+ },
+ "ga_nodesam": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): splits one node into two (NodeSam).",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "ga_submix": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): mixes in a substructure from another graph (SubMix); soft label in y_soft.",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "ga_graphcrop": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): crops a connected subgraph (GraphCrop).",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "ga_dropnode": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): deletes a node.",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "ga_dropedge": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): deletes an edge.",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "ga_addedge": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): adds an edge.",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "ga_motifswap": {
+  "what": "GraphAug augmentation (Yoo et al., WWW 2022): swaps a motif (MotifSwap).",
+  "good_for": "Graph level: light perturbed views of training graphs.",
+  "avoid_when": "'Research only' license: not freely distributable.",
+  "source": "modalities/graph/workers/gl_graphaug.py; Algorithms/GraphAug; catalog_graph.py",
+  "verified": true
+ },
+ "nl_dropedge": {
+  "what": "Randomly removes edges (EdgeRemoving, p=0.2).",
+  "good_for": "Node level: perturbed view for contrastive training/regularization (DropEdge).",
+  "avoid_when": "Blind removal: it may drop important edges (inferred from the method).",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": false
+ },
+ "nl_edgeadd": {
+  "what": "Randomly adds edges (EdgeAdding, p=0.2).",
+  "good_for": "Node level: perturbed view of the structure.",
+  "avoid_when": "PyGCL's code does not symmetrize the added edges.",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": true
+ },
+ "nl_nodedrop": {
+  "what": "Removes the edges of randomly chosen nodes (pn=0.1); the nodes stay.",
+  "good_for": "Node level: perturbed view (GraphCL).",
+  "avoid_when": "The nodes stay in the graph, isolated, with their features and labels.",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": true
+ },
+ "nl_nodeshuffle": {
+  "what": "Permutes the features across nodes (DGI-style corruption).",
+  "good_for": "Node level: corrupted view for contrastive learning.",
+  "avoid_when": "Features are no longer aligned with the labels: unsuitable for direct supervised training.",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": true
+ },
+ "nl_featmask": {
+  "what": "Zeroes out feature columns (pf=0.2).",
+  "good_for": "Node level: perturbed view of the features (GRACE).",
+  "avoid_when": "not documented",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": false
+ },
+ "nl_featdrop": {
+  "what": "Element-wise dropout on the features (pf=0.2).",
+  "good_for": "Node level: perturbed view of the features.",
+  "avoid_when": "not documented",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": false
+ },
+ "nl_ppr": {
+  "what": "Personalized PageRank diffusion, sparsified by keeping the E edges of highest weight.",
+  "good_for": "Node level: diffused view of the graph (MVGRL/GDC).",
+  "avoid_when": "Sparsification removes self-loops and can change the structure a lot. Cost not documented.",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": false
+ },
+ "nl_markov": {
+  "what": "Markov diffusion (order 8), sparsified like nl_ppr.",
+  "good_for": "Node level: diffused view of the graph.",
+  "avoid_when": "Order 8 chosen for run time, not from the paper.",
+  "source": "modalities/graph/workers/nl_pygcl.py; Algorithms/PyGCL",
+  "verified": true
+ },
+ "nl_heat": {
+  "what": "Heat kernel diffusion (PyG's GDC), top-k edges per node with k = average degree.",
+  "good_for": "Node level: diffused view of the graph.",
+  "avoid_when": "not documented",
+  "source": "modalities/graph/workers/nl_pyg.py; catalog_node.py",
+  "verified": false
+ },
+ "nl_rwsample": {
+  "what": "Samples nodes with random walks (10 % of seeds, 10 steps) and keeps the edges between visited nodes.",
+  "good_for": "Node level: subsampled view of the graph.",
+  "avoid_when": "Own code, not PyGCL's (which requires torch_sparse, not installed).",
+  "source": "modalities/graph/workers/nl_pyg.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_egosample": {
+  "what": "Samples the k-hop subgraph (5 % of seeds, 2 hops) with PyG's k_hop_subgraph.",
+  "good_for": "Node level: local view of the graph.",
+  "avoid_when": "not documented",
+  "source": "modalities/graph/workers/nl_pyg.py; catalog_node.py",
+  "verified": false
+ },
+ "nl_guided_drop": {
+  "what": "Removes edges guided by centrality (GCA style).",
+  "good_for": "Node level: perturbed view that preserves central nodes (inferred from the method).",
+  "avoid_when": "Own implementation, not GCA's original code.",
+  "source": "modalities/graph/workers/nl_pyg.py; catalog_node.py",
+  "verified": false
+ },
+ "nl_guided_perturb": {
+  "what": "Removes edges with low feature similarity and adds cosine kNN edges.",
+  "good_for": "not documented",
+  "avoid_when": "Heuristic not published as a method in its own right.",
+  "source": "modalities/graph/workers/nl_pyg.py; catalog_node.py",
+  "verified": false
+ },
+ "nl_grand": {
+  "what": "Feature DropNode + random propagation (GRAND augmentation).",
+  "good_for": "Node level: regularizing view of the features.",
+  "avoid_when": "Only the augmentation, not GRAND's consistency training.",
+  "source": "modalities/graph/workers/nl_pyg.py; Algorithms/GRAND; catalog_node.py",
+  "verified": true
+ },
+ "nl_vgae_edges": {
+  "what": "A VGAE adds the most probable edges and removes the least probable ones (GAug-M idea).",
+  "good_for": "Node level: learned edge editing.",
+  "avoid_when": "Requires GPU; dense N x N matrix, N at most 10000. Rewrite, not GAug's code.",
+  "source": "modalities/graph/workers/nl_learned.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_flag": {
+  "what": "GCN trained on the train set, then PGD (K=3) on the features: exports x + delta.",
+  "good_for": "Node level: adversarial feature examples.",
+  "avoid_when": "Requires GPU. Rewrite of the PGD step only, not FLAG's training.",
+  "source": "modalities/graph/workers/nl_learned.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_gs_upsample": {
+  "what": "Duplicates nodes of the minority classes together with their adjacencies (GraphSMOTE, upsampling setting).",
+  "good_for": "Node level: node classification with imbalanced classes (3 minority classes).",
+  "avoid_when": "Repo without a license. No new variability.",
+  "source": "modalities/graph/workers/nl_oversample.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_gs_smote": {
+  "what": "SMOTE on the features with the parent's adjacency (GraphSMOTE, smote setting).",
+  "good_for": "Node level: node classification with imbalanced classes.",
+  "avoid_when": "Repo without a license; portion increased by ~1 node per class because of a bug in the repo.",
+  "source": "modalities/graph/workers/nl_oversample.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_graphsmote": {
+  "what": "Full GraphSMOTE: SAGE encoder, SMOTE in embedding space, edge decoder.",
+  "good_for": "Node level: node classification with imbalanced classes.",
+  "avoid_when": "Requires GPU; dense N^2 adjacency, N at most 10000. Repo without a license.",
+  "source": "modalities/graph/workers/nl_oversample.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_graphens": {
+  "what": "Node synthesis with ego-networks (neighbor sampling + saliency mixup).",
+  "good_for": "Node level: minority classes in imbalanced graphs.",
+  "avoid_when": "Requires GPU (trains a supporting GCN).",
+  "source": "modalities/graph/workers/nl_oversample.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_node_mixup": {
+  "what": "Mixup of pairs of nodes of the same class (lambda ~ Beta(2,2)), edges from the dominant node.",
+  "good_for": "Node level: oversampling of minority classes.",
+  "avoid_when": "Own implementation.",
+  "source": "modalities/graph/workers/nl_oversample.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_cvae_nodes": {
+  "what": "CVAE on the features of the training nodes; edges to the 3 most similar nodes of the same class.",
+  "good_for": "Node level: generating nodes of a class.",
+  "avoid_when": "Few training nodes: limited quality. Requires GPU.",
+  "source": "modalities/graph/workers/nl_oversample.py; catalog_node.py",
+  "verified": true
+ },
+ "nl_gaug_orig": {
+  "what": "Original GAug-M/GAug-O: VGAE + classifier to edit the edges.",
+  "good_for": "Node level: learned edge editing.",
+  "avoid_when": "DESCRIBED ONLY, not runnable: requires torch 1.4 + DGL 0.4.2 + pyro + optuna. Use nl_vgae_edges.",
+  "source": "catalog_node.py (described only); https://github.com/zhao-tong/GAug",
+  "verified": true
+ },
+ "nl_graphmix": {
+  "what": "Manifold mixup in GNN training (GraphMix).",
+  "good_for": "not documented",
+  "avoid_when": "DESCRIBED ONLY, not runnable: the augmentation is internal to the training, not exportable as a graph.",
+  "source": "catalog_node.py (described only); Algorithms/GraphMix",
+  "verified": false
+ },
+ "nl_dropedge_repo": {
+  "what": "Original DropEdge repo (random edge removal).",
+  "good_for": "not documented",
+  "avoid_when": "DESCRIBED ONLY, not runnable: function covered by nl_dropedge.",
+  "source": "catalog_node.py (described only); https://github.com/DropEdge/DropEdge",
+  "verified": false
+ },
+ "nl_nodeaug": {
+  "what": "Perturbation of features and structure with consistency (NodeAug, KDD 2020).",
+  "good_for": "not documented",
+  "avoid_when": "DESCRIBED ONLY, not runnable: no code found.",
+  "source": "catalog_node.py (described only)",
+  "verified": false
+ }
+}

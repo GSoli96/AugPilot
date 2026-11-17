@@ -1,0 +1,66 @@
+﻿# Scenari per E2 (ancoraggio dei numeri) ed E3 (confronto tra LLM) di WP12.
+# Ogni scenario è una richiesta d'utente in linguaggio naturale; l'agente deve usare gli strumenti.
+# expected_tools: strumenti che una risposta completa dovrebbe chiamare (per "chiamate corrette").
+# Le esecuzioni restano entro i limiti che non chiedono conferma (1 algoritmo, 1 dataset, <= 5 epoche),
+# così lo scenario si chiude senza intervento umano.
+scenarios:
+  - id: tab1
+    modality: tabular
+    prompt: "I have the pima dataset, a binary classification task where the positive class is rare. Which augmentation algorithm should I use to improve the F1 score of the minority class, and why?"
+    expected_tools: [analyze_dataset, recommend_algorithms]
+  - id: tab2
+    modality: tabular
+    prompt: "For the abalone9-18 dataset I care mostly about privacy: I do not want synthetic rows that copy real ones. What do you recommend? Explain the trade-off with utility."
+    expected_tools: [recommend_algorithms, explain_recommendation]
+  - id: tab3
+    modality: tabular
+    prompt: "Compare SMOTE and TVAE on yeast1 using the benchmark results. Which is better for utility and which for fidelity?"
+    expected_tools: [compare_results]
+  - id: tab4
+    modality: tabular
+    prompt: "I have a new medical table with 400 rows, 20 mostly categorical columns and an imbalance ratio of about 15. Which three algorithms would you try first and on what evidence?"
+    expected_tools: [recommend_algorithms]
+  - id: tab5
+    modality: tabular
+    prompt: "Run SMOTE on iris0 and tell me how good the generated data is."
+    expected_tools: [run_augmentation, evaluate]
+  - id: ts1
+    modality: ts
+    prompt: "I have the sine_small time-series dataset. Which augmentation method should I use to improve a downstream classifier, and why that one?"
+    expected_tools: [analyze_dataset, recommend_algorithms]
+  - id: ts2
+    modality: ts
+    prompt: "For the stock dataset I need realistic synthetic sequences that preserve the temporal correlations. What do you suggest?"
+    expected_tools: [recommend_algorithms, explain_recommendation]
+  - id: ts3
+    modality: ts
+    prompt: "Is a generative model like TimeVAE worth its cost compared with simple jittering on cbf? Use the measured results."
+    expected_tools: [compare_results]
+  - id: ts4
+    modality: ts
+    prompt: "My sensor dataset has 2,000 multivariate series of length 24 with 10 channels and no labels. What should I try?"
+    expected_tools: [recommend_algorithms]
+  - id: ts5
+    modality: ts
+    prompt: "Apply block bootstrap to sine_small and summarise the quality of the result."
+    expected_tools: [run_augmentation]
+  - id: g1
+    modality: graph
+    prompt: "I want to improve graph classification accuracy on MUTAG. Which augmentation method do you recommend and why?"
+    expected_tools: [analyze_dataset, recommend_algorithms]
+  - id: g2
+    modality: graph
+    prompt: "For node classification on Cora, which augmentation gives the best utility according to the benchmark? Explain your choice."
+    expected_tools: [recommend_algorithms, explain_recommendation]
+  - id: g3
+    modality: graph
+    prompt: "Compare DropEdge and G-Mixup on PROTEINS with the available results."
+    expected_tools: [compare_results]
+  - id: g4
+    modality: graph
+    prompt: "I have a molecular dataset with about 1,000 small graphs and two imbalanced classes. Which methods should I consider?"
+    expected_tools: [recommend_algorithms]
+  - id: g5
+    modality: graph
+    prompt: "Why did you rank the first method above the second for MUTAG? Show me the numbers behind the recommendation."
+    expected_tools: [explain_recommendation]

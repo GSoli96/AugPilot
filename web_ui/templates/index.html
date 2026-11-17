@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabular Data Augmentation & Evaluation Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dark-theme mode-tabular">
+
+    {% include '_sitenav.html' %}
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+        <div class="nav-brand">
+            <i class="fa-solid fa-microchip nav-icon"></i>
+            <div>
+                <span class="brand-title">SyRFDRes & AugPilot</span>
+                <span class="brand-subtitle">Benchmark & Metric Evaluation Suite</span>
+            </div>
+        </div>
+
+        <div class="nav-status">
+            <span id="gpu-badge" class="badge badge-device"><i class="fa-solid fa-server"></i> Detecting...</span>
+            <span id="task-status-badge" class="badge badge-idle"><i class="fa-solid fa-circle-check"></i> System Idle</span>
+            
+            <!-- Theme & Accents Customizer -->
+            <div class="nav-theme-controls">
+                <div class="theme-palette" title="Customize accent color">
+                    <span class="color-dot dot-indigo active" onclick="setAccentColor('indigo', '#6366f1')"></span>
+                    <span class="color-dot dot-cyan" onclick="setAccentColor('cyan', '#06b6d4')"></span>
+                    <span class="color-dot dot-emerald" onclick="setAccentColor('emerald', '#10b981')"></span>
+                    <span class="color-dot dot-purple" onclick="setAccentColor('purple', '#8b5cf6')"></span>
+                    <span class="color-dot dot-amber" onclick="setAccentColor('amber', '#f59e0b')"></span>
+                    <span class="color-dot dot-rose" onclick="setAccentColor('rose', '#f43f5e')"></span>
+                </div>
+                <button id="theme-toggle-btn" class="btn btn-secondary btn-sm" onclick="toggleTheme()" title="Switch Light / Dark theme">
+                    <i class="fa-solid fa-sun" id="theme-icon"></i>
+                    <span id="theme-label">Light</span>
+                </button>
+            </div>
+
+            <button id="view-console-btn" class="btn btn-secondary btn-sm" onclick="toggleConsoleDrawer()">
+                <i class="fa-solid fa-terminal"></i> Console Live
+            </button>
+        </div>
+    </header>
+
+    <!-- Layout a due colonne: contenuti a sinistra, chat dell'assistente a destra -->
+    <div class="ac-layout" id="ac-layout">
+    <!-- Main Container with Navigation Tabs -->
+    <div class="app-container">
+        
+        <!-- Selettore di modalita' -->
+        <div class="card" style="margin-bottom:12px; padding:10px 14px;">
+            <div class="mode-switch" id="mode-switch">
+                <strong style="margin-right:6px">Modality:</strong>
+                <button type="button" class="btn-toggle active" data-mode="tabular" onclick="setMode('tabular')">Tabular <span class="mode-count" id="mode-count-tabular"></span></button>
+                <button type="button" class="btn-toggle" data-mode="ts" onclick="setMode('ts')">Time series <span class="mode-count" id="mode-count-ts"></span></button>
+                <button type="button" class="btn-toggle" data-mode="graph" onclick="setMode('graph')">Graphs <span class="mode-count" id="mode-count-graph"></span></button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-btn tab-modality" data-tab="tab-modality" onclick="switchTab('tab-modality')">
+                <i class="fa-solid fa-diagram-project"></i> Algorithms, Datasets and Results
+            </button>
+            <button class="tab-btn active tab-tabular" data-tab="tab-augment" onclick="switchTab('tab-augment')">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 1. Augmentation Runner
+            </button>
+            <button class="tab-btn tab-tabular" data-tab="tab-evaluate" onclick="switchTab('tab-evaluate')">
+                <i class="fa-solid fa-chart-pie"></i> 2. Metrics Evaluation
+            </button>
+            <button class="tab-btn tab-tabular" data-tab="tab-analytics" onclick="switchTab('tab-analytics')">
+                <i class="fa-solid fa-chart-line"></i> 3. Visual Analytics & Plots
+            </button>
+            <button class="tab-btn tab-tabular" data-tab="tab-runtime" onclick="switchTab('tab-runtime')">
+                <i class="fa-solid fa-stopwatch"></i> 4. Runtime Metrics
+            </button>
+            <button class="tab-btn tab-tabular" data-tab="tab-checkpoints" onclick="switchTab('tab-checkpoints')">
+                <i class="fa-solid fa-box-archive"></i> 5. Checkpoints & Generation
+            </button>
+        </nav>
+
+        <!-- ==================================================================== -->
+        <!-- TAB MODALITA' (serie temporali / grafi)                               -->
+        <!-- ==================================================================== -->
+        <section id="tab-modality" class="tab-content">
+            <div class="mod-counts" id="mod-counts"></div>
+            <div id="mod-catalog-error" class="mod-empty" style="display:none"></div>
+            <div class="grid-2col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-database"></i> 1. Dataset <span id="mod-name" class="badge badge-info"></span></h2>
+                        <div class="header-actions">
+                            <button class="btn btn-xs btn-outline" onclick="modSelectAll('datasets', true)">All</button>
+                            <button class="btn btn-xs btn-outline" onclick="modSelectAll('datasets', false)">None</button>
+                        </div>
+                    </div>
+                    <div id="mod-datasets" class="mod-list"><div class="loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div></div>
+
+                    <div class="card-header mt-4">
+                        <h2><i class="fa-solid fa-brain"></i> 2. Algorithms</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-xs btn-outline" onclick="modSelectAll('algos', true)">Startable</button>
+                            <button class="btn btn-xs btn-outline" onclick="modSelectAll('algos', false)">None</button>
+                        </div>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="mod-algo-search" placeholder="Filter by name, strategy or status..." oninput="renderModAlgos()">
+                    </div>
+                    <div id="mod-algos" class="mod-list"></div>
+                    <p class="help-text">Status: <span class="badge-status executable">executable</span> tested with at least one real run;
+                        <span class="badge-status wired">wired</span> connected but not yet tested;
+                        <span class="badge-status described">described</span> description only, not startable.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h2><i class="fa-solid fa-sliders"></i> 3. Parameters</h2></div>
+                    <div class="params-section">
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label for="mod-epochs">Training epochs</label>
+                                <input type="number" id="mod-epochs" value="5" min="1" max="5000">
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="mod-n-samples">Samples to generate (empty = default)</label>
+                                <input type="number" id="mod-n-samples" placeholder="default" min="1">
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="mod-seed">Seed</label>
+                                <input type="number" id="mod-seed" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Device</label>
+                            <div class="btn-group-toggle" id="mod-device-group">
+                                <button type="button" class="btn-toggle active" data-device="auto" onclick="setModDevice('auto')">Auto</button>
+                                <button type="button" class="btn-toggle" data-device="cpu" onclick="setModDevice('cpu')">CPU</button>
+                                <button type="button" class="btn-toggle" data-device="cuda" onclick="setModDevice('cuda')">CUDA</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="switch-container">
+                                <input type="checkbox" id="mod-no-eval">
+                                <span class="slider round"></span>
+                                <span class="switch-label">Skip metrics computation (<code class="code-tag">--no_eval</code>)</span>
+                            </label>
+                        </div>
+                        <div id="mod-selection-summary" class="help-text"></div>
+                    </div>
+                    <div class="action-footer mt-4">
+                        <button id="mod-start-btn" class="btn btn-primary btn-lg btn-block" onclick="startModalityRun()">
+                            <i class="fa-solid fa-play"></i> Start
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-stopwatch"></i> Results</h2>
+                    <div class="header-actions">
+                        <select id="mod-results-file" onchange="loadModResults()"></select>
+                        <span id="mod-results-count" class="table-count-badge">0 records</span>
+                        <button class="btn btn-outline btn-sm" onclick="loadModResults()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="mod-results-table">
+                        <thead id="mod-results-head"></thead>
+                        <tbody id="mod-results-body"><tr><td class="text-center">No results.</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 1: AUGMENTATION RUNNER                                            -->
+        <!-- ==================================================================== -->
+        <section id="tab-augment" class="tab-content active">
+            <div class="grid-2col">
+                
+                <!-- Left: Dataset & Algorithm Selection -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-database"></i> 1. Select Datasets</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-xs btn-outline" onclick="selectAllDatasets(true)">All</button>
+                            <button class="btn btn-xs btn-outline" onclick="selectAllDatasets(false)">None</button>
+                        </div>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="dataset-search" placeholder="Filter datasets..." oninput="filterDatasets()">
+                    </div>
+                    <div id="datasets-grid" class="datasets-grid-container">
+                        <div class="loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading datasets...</div>
+                    </div>
+
+                    <div class="card-header mt-4">
+                        <h2><i class="fa-solid fa-brain"></i> 2. Select Algorithms</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-xs btn-outline" onclick="selectAlgosByCategory('all')">All</button>
+                            <button class="btn btn-xs btn-outline" onclick="selectAlgosByCategory('Constraint-Aware')">Constraint-Aware</button>
+                            <button class="btn btn-xs btn-outline" onclick="selectAlgosByCategory('none')">Reset</button>
+                        </div>
+                    </div>
+                    <div class="algo-category-tabs">
+                        <button class="cat-chip active" onclick="filterAlgoCards('all', this)">All</button>
+                        <button class="cat-chip" onclick="filterAlgoCards('Traditional & Fair', this)">Traditional & Fair</button>
+                        <button class="cat-chip" onclick="filterAlgoCards('GAN & VAE', this)">GAN & VAE</button>
+                        <button class="cat-chip" onclick="filterAlgoCards('Diffusion & Advanced', this)">Diffusion & Advanced</button>
+                        <button class="cat-chip" onclick="filterAlgoCards('Constraint-Aware', this)">Constraint-Aware</button>
+                    </div>
+                    <div id="algos-container" class="algos-grid">
+                        <div class="loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading algorithms...</div>
+                    </div>
+                </div>
+
+                <!-- Right: Hyperparameters & Constraint Configurations -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-sliders"></i> 3. Run parameters</h2>
+                    </div>
+
+                    <div class="params-section">
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label for="param-n-samples">
+                                    Number of tuples to generate
+                                    <span class="tooltip" title="Default: 1000 tuples (-1 or empty to generate the same number as the original dataset)"><i class="fa-solid fa-circle-question"></i></span>
+                                </label>
+                                <input type="number" id="param-n-samples" placeholder="E.g. 1000 (default: 1000)" value="1000" min="-1">
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="param-epochs">Training epochs</label>
+                                <input type="number" id="param-epochs" value="1000" min="1" max="5000">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Target Hardware</label>
+                            <div class="btn-group-toggle" id="device-group">
+                                <button type="button" class="btn-toggle active" data-device="auto" onclick="setDevice('auto')">Auto</button>
+                                <button type="button" class="btn-toggle" data-device="cpu" onclick="setDevice('cpu')">CPU Only</button>
+                                <button type="button" class="btn-toggle" data-device="cuda" onclick="setDevice('cuda')">CUDA (NVIDIA)</button>
+                                <button type="button" class="btn-toggle" data-device="mps" onclick="setDevice('mps')">MPS (Apple)</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="switch-container">
+                                <input type="checkbox" id="param-resume" checked>
+                                <span class="slider round"></span>
+                                <span class="switch-label"><strong>Resume from checkpoint</strong>: skips tests already completed successfully.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Special Constraint-Aware Accordion Panel -->
+                    <div class="constraint-panel mt-3">
+                        <div class="constraint-header" onclick="toggleConstraintDetails()">
+                            <h3><i class="fa-solid fa-shield-halved"></i> Constraint configuration (Kamino & SyRFDRes)</h3>
+                            <i id="constraint-chevron" class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="constraint-body" class="constraint-body">
+                            
+                            <!-- Kamino DC Configuration -->
+                            <div class="sub-panel">
+                                <h4><i class="fa-solid fa-file-code"></i> Denial Constraints (DC) for Kamino</h4>
+                                <p class="help-text">Kamino requires a Denial Constraints file (.out or .ic).</p>
+                                
+                                <div class="form-group">
+                                    <label for="kamino-dc-select">Detected DC files:</label>
+                                    <select id="kamino-dc-select" onchange="syncDcPathInput()">
+                                        <option value="">-- Automatic resolution from the dataset or DC folder --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kamino-dc-custom">Or custom path:</label>
+                                    <input type="text" id="kamino-dc-custom" placeholder="/full/path/dataset_dcs.out">
+                                </div>
+
+                                <div class="form-group mt-2">
+                                    <label>Kamino weight strategy (<code class="code-tag">--kamino-weights</code>):</label>
+                                    <div class="weight-chips">
+                                        <label class="radio-chip"><input type="radio" name="kamino_weight" value="toggled" checked> <span>toggled (default)</span></label>
+                                        <label class="radio-chip"><input type="radio" name="kamino_weight" value="hard"> <span>hard (1000.0)</span></label>
+                                        <label class="radio-chip"><input type="radio" name="kamino_weight" value="raw"> <span>raw (plain SGD)</span></label>
+                                        <label class="radio-chip"><input type="radio" name="kamino_weight" value="dp"> <span>dp (Diff. privacy)</span></label>
+                                        <label class="radio-chip"><input type="radio" name="kamino_weight" value="uniform"> <span>uniform (1.0)</span></label>
+                                        <label class="radio-chip highlight"><input type="radio" name="kamino_weight" value="all"> <span>all (compare all)</span></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Run Actions CTA -->
+                    <div class="action-footer mt-4">
+                        <button id="start-augment-btn" class="btn btn-primary btn-lg btn-block" onclick="startAugmentation()">
+                            <i class="fa-solid fa-play"></i> Start Data Augmentation Benchmark
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 2: METRICS EVALUATION                                             -->
+        <!-- ==================================================================== -->
+        <section id="tab-evaluate" class="tab-content">
+            <div class="card max-w-800 mx-auto">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-chart-pie"></i> Quantitative Metrics Computation (Fidelity & Diversity)</h2>
+                </div>
+                <div class="card-body">
+                    <p class="description">
+                        Exhaustively computes the 14 <strong>Fidelity</strong> metrics (KL, JS, WD, MMD, pMSE, KS, etc.) and the 11 <strong>Diversity</strong> metrics (Density, Coverage, mDCR, DBI, FE ratio) by comparing the generated synthetic data with the real minority dataset.
+                    </p>
+
+                    <div class="form-group mt-3">
+                        <label for="eval-dataset-select">Select dataset to evaluate:</label>
+                        <select id="eval-dataset-select">
+                            <option value="all">All datasets (global evaluation)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label>Algorithm filter:</label>
+                        <div class="radio-group-horizontal">
+                            <label><input type="radio" name="eval_algo_mode" value="all" checked onchange="toggleEvalAlgoCustom(false)"> All models (Standard + Kamino + SyDC sweep)</label>
+                            <label><input type="radio" name="eval_algo_mode" value="sydc" onchange="toggleEvalAlgoCustom(false)"> SyDC only (Denial Constraints sweep)</label>
+                            <label><input type="radio" name="eval_algo_mode" value="custom" onchange="toggleEvalAlgoCustom(true)"> Custom subset</label>
+                        </div>
+                        <div id="eval-custom-algo-box" class="mt-2 hidden">
+                            <input type="text" id="eval-custom-algos" placeholder="e.g. smote kamino sydc tabsyn" class="form-control">
+                            <small class="help-text">Enter the names separated by spaces.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="eval-bins">Number of bins for histograms & entropies (KL/JS):</label>
+                        <input type="number" id="eval-bins" value="30" min="5" max="100">
+                    </div>
+
+                    <div class="action-footer mt-4">
+                        <button id="start-eval-btn" class="btn btn-success btn-lg btn-block" onclick="startEvaluation()">
+                            <i class="fa-solid fa-calculator"></i> Start Metrics Evaluation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 3: VISUAL ANALYTICS & PLOTS                                      -->
+        <!-- ==================================================================== -->
+        <section id="tab-analytics" class="tab-content">
+            <!-- Analytics Header & Dataset Selector -->
+            <div class="analytics-toolbar card">
+                <div class="toolbar-left">
+                    <label for="analytics-dataset-select"><strong>Dataset under analysis:</strong></label>
+                    <select id="analytics-dataset-select" onchange="loadAnalyticsData()">
+                        <option value="">Loading evaluated datasets...</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" onclick="loadAnalyticsData()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                </div>
+                <div class="toolbar-right" id="analytics-kpis">
+                    <div class="kpi-pill"><span class="kpi-label">Algorithms compared:</span> <span id="kpi-algos" class="kpi-val">-</span></div>
+                    <div class="kpi-pill highlight-gold"><span class="kpi-label">Best Quality:</span> <span id="kpi-best-q" class="kpi-val">-</span></div>
+                    <div class="kpi-pill highlight-teal"><span class="kpi-label">Best Diversity:</span> <span id="kpi-best-d" class="kpi-val">-</span></div>
+                </div>
+            </div>
+
+            <!-- Charts Grid 1: Quality vs Diversity Scatter & Multi-Dimensional Radar -->
+            <div class="grid-2col mt-3">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-crosshairs"></i> Trade-off Quality ↔ Diversity</h3>
+                        <div class="header-actions">
+                            <span class="badge badge-info">Top right = best</span>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-tradeoff', 'png', 'tradeoff_quality_diversity')" title="Export as PNG image"><i class="fa-solid fa-camera"></i> PNG</button>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-tradeoff', 'svg', 'tradeoff_quality_diversity')" title="Export as SVG vector"><i class="fa-solid fa-file-code"></i> SVG</button>
+                        </div>
+                    </div>
+                    <div id="plot-tradeoff" class="plotly-chart-container"></div>
+                </div>
+
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-compass-drafting"></i> Multi-criteria radar profile (Top-8)</h3>
+                        <div class="header-actions">
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-radar', 'png', 'radar_multicriteria')" title="Export as PNG image"><i class="fa-solid fa-camera"></i> PNG</button>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-radar', 'svg', 'radar_multicriteria')" title="Export as SVG vector"><i class="fa-solid fa-file-code"></i> SVG</button>
+                        </div>
+                    </div>
+                    <div id="plot-radar" class="plotly-chart-container"></div>
+                </div>
+            </div>
+
+            <!-- Charts Grid 2: Diversity Metrics Bar Chart & Full Heatmap -->
+            <div class="grid-1col mt-3">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-chart-column"></i> Diversity metrics compared</h3>
+                        <div class="header-actions">
+                            <select id="diversity-metric-picker" onchange="renderDiversityBarChart()">
+                                <option value="Density">Density (↑ better)</option>
+                                <option value="Coverage">Coverage (↑ better)</option>
+                                <option value="mDCR">mDCR (↑ better)</option>
+                                <option value="FE_ratio_mean">FE_ratio_mean (↑ better)</option>
+                                <option value="DBI_div">DBI_div (↑ better)</option>
+                                <option value="Coverage_div">Coverage_div (↑ better)</option>
+                            </select>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-diversity-bars', 'png', 'diversity_bars')" title="Export PNG"><i class="fa-solid fa-camera"></i> PNG</button>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-diversity-bars', 'svg', 'diversity_bars')" title="Export SVG"><i class="fa-solid fa-file-code"></i> SVG</button>
+                        </div>
+                    </div>
+                    <div id="plot-diversity-bars" class="plotly-chart-container"></div>
+                </div>
+
+                <div class="card chart-card mt-3">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-table-cells"></i> Full heatmap of normalized metrics</h3>
+                        <div class="header-actions">
+                            <span class="badge badge-success">Scale 0.0 (worst) → 1.0 (best)</span>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-heatmap', 'png', 'heatmap_metrics')" title="Export PNG"><i class="fa-solid fa-camera"></i> PNG</button>
+                            <button class="btn btn-xs btn-outline" onclick="exportPlot('plot-heatmap', 'svg', 'heatmap_metrics')" title="Export SVG"><i class="fa-solid fa-file-code"></i> SVG</button>
+                        </div>
+                    </div>
+                    <div id="plot-heatmap" class="plotly-chart-container heatmap-tall"></div>
+                </div>
+            </div>
+
+            <!-- Multi-Criteria Final Rankings Table -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-trophy"></i> Overall multi-criteria ranking</h3>
+                    <div class="header-actions">
+                        <span id="rankings-count" class="table-count-badge">0 algorithms</span>
+                        <button class="btn btn-xs btn-outline" onclick="exportRankingsCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+                    </div>
+                </div>
+                
+                <!-- Datatable Search Filter -->
+                <div class="table-toolbar">
+                    <div class="table-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="rankings-search" placeholder="Filter ranking by algorithm name..." oninput="filterRankingsTable(this.value)">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="rankings-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortRankingsTable('rank')">Rank</th>
+                                <th class="sortable" onclick="sortRankingsTable('algo_short')">Algorithm</th>
+                                <th class="sortable" onclick="sortRankingsTable('quality_score')">Quality Score (↑)</th>
+                                <th class="sortable" onclick="sortRankingsTable('diversity_score')">Diversity Score (↑)</th>
+                                <th class="sortable" onclick="sortRankingsTable('avg_rank')">Average rank (↓)</th>
+                                <th class="sortable" onclick="sortRankingsTable('n_generated')">Samples generated</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankings-table-body">
+                            <tr><td colspan="6" class="text-center">Select a dataset to view the ranking.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 4: RUNTIME RESULTS                                                -->
+        <!-- ==================================================================== -->
+        <section id="tab-runtime" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-stopwatch"></i> Runtime metrics (latest benchmark)</h2>
+                    <div class="header-actions">
+                        <span id="runtime-count" class="table-count-badge">0 benchmarks</span>
+                        <button class="btn btn-outline btn-sm" onclick="loadRuntimeResults()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                        <button class="btn btn-outline btn-sm" onclick="exportRuntimeCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+                    </div>
+                </div>
+
+                <!-- Datatable Search Filter -->
+                <div class="table-toolbar">
+                    <div class="table-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="runtime-search" placeholder="Filter by algorithm, dataset, status or error..." oninput="filterRuntimeTable(this.value)">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="runtime-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortRuntimeTable('timestamp')">Timestamp</th>
+                                <th class="sortable" onclick="sortRuntimeTable('algorithm')">Algorithm</th>
+                                <th class="sortable" onclick="sortRuntimeTable('dataset')">Dataset</th>
+                                <th class="sortable" onclick="sortRuntimeTable('status')">Status</th>
+                                <th class="sortable" onclick="sortRuntimeTable('total_time_s')">Total time (s)</th>
+                                <th class="sortable" onclick="sortRuntimeTable('train_time_s')">Train (s)</th>
+                                <th class="sortable" onclick="sortRuntimeTable('gen_time_s')">Gen (s)</th>
+                                <th class="sortable" onclick="sortRuntimeTable('total_mem_peak_mb')">RAM Peak (MB)</th>
+                                <th class="sortable" onclick="sortRuntimeTable('n_orig')">Orig rows</th>
+                                <th class="sortable" onclick="sortRuntimeTable('n_augmented')">Gen rows</th>
+                                <th>Errors / Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="runtime-table-body">
+                            <tr><td colspan="11" class="text-center">Loading results...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 5: CHECKPOINTS & GENERATION                                       -->
+        <!-- ==================================================================== -->
+        <section id="tab-checkpoints" class="tab-content">
+            <div class="grid-2col">
+                
+                <!-- Left: Discovered Checkpoints & Upload -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-box-archive"></i> 1. Select or Upload Checkpoint</h2>
+                        <div class="header-actions">
+                            <span id="checkpoints-count" class="table-count-badge">0 checkpoint</span>
+                            <button class="btn btn-outline btn-xs" onclick="loadCheckpoints()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Box -->
+                    <div class="upload-dropzone mt-2" id="checkpoint-dropzone" onclick="document.getElementById('ckpt-file-input').click()">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <div class="upload-text"><strong>Drag the checkpoint file here</strong> or click to browse</div>
+                        <div class="upload-hint">Supported: .pth, .pt, .pkl, .ckpt, .bin (saved in checkpoint/)</div>
+                        <input type="file" id="ckpt-file-input" style="display:none" onchange="handleCheckpointUpload(this.files)" accept=".pth,.pt,.pkl,.ckpt,.bin,.joblib">
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="search-bar mt-3">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="ckpt-search" placeholder="Filter checkpoints by name, algorithm or dataset..." oninput="filterCheckpoints(this.value)">
+                    </div>
+
+                    <!-- Checkpoints List -->
+                    <div id="checkpoints-list" class="datasets-grid-container" style="max-height: 400px; margin-top: 10px;">
+                        <div class="loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Searching for checkpoints...</div>
+                    </div>
+                </div>
+
+                <!-- Right: Generation Settings from Checkpoint -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-wand-magic-sparkles"></i> 2. Generation from Checkpoint</h2>
+                    </div>
+
+                    <div class="params-section">
+                        <!-- Selected Checkpoint Info Card -->
+                        <div class="selected-ckpt-card" id="selected-ckpt-box">
+                            <div class="ckpt-empty-msg"><i class="fa-solid fa-circle-info"></i> No checkpoint selected. Choose one from the list on the left or upload a new one.</div>
+                        </div>
+
+                        <!-- Manual Path Override -->
+                        <div class="form-group mt-3">
+                            <label for="manual-ckpt-path">Or enter a custom path:</label>
+                            <input type="text" id="manual-ckpt-path" placeholder="/full/path/to/model.pt" oninput="handleManualCkptInput(this.value)">
+                        </div>
+
+                        <!-- Algorithm selector -->
+                        <div class="form-group">
+                            <label for="ckpt-algo-select">Model algorithm:</label>
+                            <select id="ckpt-algo-select">
+                                <option value="auto">Automatic detection from the model</option>
+                                <option value="tabsyn">TabSyn (Latent Tabular Diffusion)</option>
+                                <option value="tabdiff">TabDiff (Deterministic Score Diffusion)</option>
+                                <option value="ddpm">Tab-DDPM (Denoising Diffusion Probabilistic)</option>
+                                <option value="ctabgan-plus">CTAB-GAN+ (Conditional Table GAN Plus)</option>
+                                <option value="ctabgan">CTAB-GAN (Conditional Table GAN)</option>
+                                <option value="tvae">TVAE (Tabular Variational Autoencoder)</option>
+                                <option value="goggle">GOGGLE (Graph Generative Model)</option>
+                                <option value="harmonic">HARMONIC (Spatial Clustering)</option>
+                                <option value="syrfd">SyRFDRes (RFD-Aware Synthesizer)</option>
+                                <option value="castgan">CasTGAN (Cascaded GAN)</option>
+                                <option value="generic">Generic / schema matching</option>
+                            </select>
+                        </div>
+
+                        <!-- Reference Dataset -->
+                        <div class="form-group">
+                            <label for="ckpt-dataset-select">Reference dataset (schema & attributes):</label>
+                            <select id="ckpt-dataset-select">
+                                <option value="">-- Select a dataset from datasets/ --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label for="ckpt-n-samples">Number of tuples to generate:</label>
+                                <input type="number" id="ckpt-n-samples" value="1000" min="1">
+                            </div>
+                            <div class="form-group flex-1">
+                                <label>Target Hardware:</label>
+                                <div class="btn-group-toggle" id="ckpt-device-group">
+                                    <button type="button" class="btn-toggle active" data-device="auto" onclick="setCkptDevice('auto')">Auto</button>
+                                    <button type="button" class="btn-toggle" data-device="cpu" onclick="setCkptDevice('cpu')">CPU</button>
+                                    <button type="button" class="btn-toggle" data-device="cuda" onclick="setCkptDevice('cuda')">CUDA</button>
+                                    <button type="button" class="btn-toggle" data-device="mps" onclick="setCkptDevice('mps')">MPS</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ckpt-output-name">Output CSV file name (optional):</label>
+                            <input type="text" id="ckpt-output-name" placeholder="Es. iris0_min_from_tabsyn.csv">
+                        </div>
+
+                        <div class="action-footer mt-4">
+                            <button id="start-ckpt-gen-btn" class="btn btn-primary btn-lg btn-block" onclick="startCheckpointGeneration()">
+                                <i class="fa-solid fa-play"></i> Start Generation from Checkpoint
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- PANNELLO CHAT DELL'ASSISTENTE (sempre presente, aperto all'avvio)     -->
+    <!-- ==================================================================== -->
+    <aside id="ac-panel" class="ac-panel" aria-label="Assistant">
+        <div class="ac-head">
+            <button type="button" id="ac-toggle" class="btn btn-secondary btn-xs ac-toggle" onclick="toggleAssistantPanel()" title="Shrink / enlarge the chat">
+                <i class="fa-solid fa-comments"></i><span class="ac-toggle-label"> Assistant</span> <i id="ac-chevron" class="fa-solid fa-chevron-right"></i>
+            </button>
+            <span id="ac-status" class="badge badge-device ac-status"><i class="fa-solid fa-circle-notch fa-spin"></i> Checking...</span>
+            <button type="button" class="btn btn-xs btn-outline ac-new" onclick="assistantChat.reset()" title="New conversation"><i class="fa-solid fa-rotate-right"></i> New</button>
+        </div>
+        <div class="ac-body">
+            <div id="ac-offline" class="ac-offline"></div>
+            <div id="ac-log" class="as-log"></div>
+            <div class="as-input">
+                <textarea id="ac-input" placeholder="Write to the assistant (Enter to send, Shift+Enter for a new line)"></textarea>
+                <button id="ac-send" class="btn btn-primary" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </aside>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- SLIDE-UP TERMINAL CONSOLE DRAWER                                      -->
+    <!-- ==================================================================== -->
+    <div id="console-drawer" class="console-drawer">
+        <div class="console-header">
+            <div class="console-title">
+                <i class="fa-solid fa-terminal"></i>
+                <span>Asynchronous Execution Console</span>
+                <span id="console-task-id" class="console-badge">No active task</span>
+            </div>
+            <div class="console-controls">
+                <button class="btn btn-danger btn-xs" id="stop-task-btn" onclick="stopCurrentTask()" disabled>
+                    <i class="fa-solid fa-ban"></i> Stop Task
+                </button>
+                <button class="btn btn-secondary btn-xs" onclick="clearConsole()">
+                    <i class="fa-solid fa-eraser"></i> Clear
+                </button>
+                <button class="btn btn-icon btn-xs" onclick="toggleConsoleDrawer()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        <pre id="console-output" class="console-body">Waiting for a task to start...</pre>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modalities.js') }}"></script>
+    {% include '_md_scripts.html' %}
+    <script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/assistant_chat.js') }}"></script>
+    <script>
+    // Chat dell'assistente nella home: logica condivisa in assistant_chat.js
+    const assistantChat = AssistantChat.create({
+        log: 'ac-log', input: 'ac-input', sendBtn: 'ac-send', welcome: true,
+        onStatus: st => {
+            const b = document.getElementById('ac-status'), off = document.getElementById('ac-offline');
+            if (!st) { b.className = 'badge badge-idle ac-status'; b.textContent = 'Status unavailable'; return; }
+            const detail = [st.backend, st.model].filter(Boolean).join(' / ');
+            if (st.mode === 'online') {
+                b.className = 'badge badge-running ac-status';
+                b.innerHTML = '<i class="fa-solid fa-bolt"></i> Online';
+                b.title = detail;
+                if (detail) b.appendChild(document.createTextNode(' - ' + detail));
+                off.style.display = 'none';
+            } else {
+                b.className = 'badge badge-idle ac-status';
+                b.innerHTML = '<i class="fa-solid fa-plug-circle-xmark"></i> Offline';
+                off.style.display = 'block';
+                off.textContent = "Offline mode: " + (st.reason || 'no model available') +
+                    '. No answer is simulated. You can still use the tabs on the left.';
+            }
+        },
+        // Un'azione dell'assistente porta alla vista dei risultati della modalita' giusta
+        onResults: (mod) => {
+            try { setMode(mod); } catch (e) { /* modalities.js assente */ }
+            if (mod === 'tabular') switchTab('tab-runtime');
+            else { const r = document.getElementById('mod-results-body'); if (r) r.scrollIntoView({behavior: 'smooth', block: 'start'}); }
+        },
+    });
+    function setAssistantPanel(open) {
+        const p = document.getElementById('ac-panel');
+        p.classList.toggle('collapsed', !open);
+        document.getElementById('ac-chevron').className = 'fa-solid ' + (open ? 'fa-chevron-right' : 'fa-chevron-left');
+        try { localStorage.setItem('dataaug_assistant_open', open ? '1' : '0'); } catch (e) { /* storage non disponibile */ }
+    }
+    function toggleAssistantPanel() { setAssistantPanel(document.getElementById('ac-panel').classList.contains('collapsed')); }
+    document.addEventListener('DOMContentLoaded', () => {
+        let open = true;
+        try { if (localStorage.getItem('dataaug_assistant_open') === '0') open = false; } catch (e) { /* aperto di default */ }
+        setAssistantPanel(open);
+        assistantChat.intro();
+        assistantChat.refreshStatus();
+    });
+    </script>
+</body>
+</html>

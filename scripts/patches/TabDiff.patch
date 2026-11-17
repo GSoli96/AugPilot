@@ -1,0 +1,38 @@
+diff --git a/tabdiff/main.py b/tabdiff/main.py
+index 262665d..b53f821 100644
+--- a/tabdiff/main.py
++++ b/tabdiff/main.py
+@@ -35,8 +35,9 @@ def main(args):
+ 
+     ## Get data info
+     dataname = args.dataname
+-    data_dir = f'data/{dataname}'
+-    info_path = f'data/{dataname}/info.json'
++    tabdiff_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++    data_dir = os.path.join(tabdiff_root, 'data', dataname)
++    info_path = os.path.join(data_dir, 'info.json')
+     with open(info_path, 'r') as f:
+         info = json.load(f)
+     
+@@ -128,7 +129,7 @@ def main(args):
+         train_data,
+         batch_size = batch_size,
+         shuffle = True,
+-        num_workers = 4,
++        num_workers = 0,
+     )
+     d_numerical, categories = train_data.d_numerical, train_data.categories
+     
+diff --git a/tabdiff/trainer.py b/tabdiff/trainer.py
+index 81b2552..6180440 100644
+--- a/tabdiff/trainer.py
++++ b/tabdiff/trainer.py
+@@ -58,7 +58,7 @@ class Trainer:
+         self.optimizer = torch.optim.AdamW(self.diffusion.parameters(), lr=lr, weight_decay=weight_decay)
+         self.ema_decay = ema_decay
+         self.lr_scheduler = lr_scheduler
+-        self.scheduler = ReduceLROnPlateau(self.optimizer, mode='min', factor=factor, patience=reduce_lr_patience, verbose=True)
++        self.scheduler = ReduceLROnPlateau(self.optimizer, mode='min', factor=factor, patience=reduce_lr_patience)
+         self.closs_weight_schedule = closs_weight_schedule
+         self.c_lambda = c_lambda
+         self.d_lambda = d_lambda

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guided path</title>
+<meta name="description" content="Six steps (goal, data, algorithms, run, results, explanation), one task at a time, with the assistant alongside that knows the current step.">
+<link rel="stylesheet" href="{{ url_for('static', filename='guided/guided.css') }}">
+</head>
+<body>
+{% include '_sitenav.html' %}
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="brand">
+    <h1>Guided path</h1>
+    <p>Data augmentation in six steps</p>
+  </div>
+</header>
+
+<nav class="stepper" aria-label="Path steps">
+  <ol id="stepper"></ol>
+</nav>
+
+<section class="strip" aria-label="Summary of choices" id="strip"></section>
+<div class="note" id="pf-note" role="status" hidden style="margin:8px 16px"></div>
+
+<div class="layout">
+  <main id="main" tabindex="-1">
+    <section class="panel" id="step-1" data-step="1" hidden></section>
+    <section class="panel" id="step-2" data-step="2" hidden></section>
+    <section class="panel" id="step-3" data-step="3" hidden></section>
+    <section class="panel" id="step-4" data-step="4" hidden></section>
+    <section class="panel" id="step-5" data-step="5" hidden></section>
+    <section class="panel" id="step-6" data-step="6" hidden></section>
+    <div class="pager">
+      <button type="button" class="btn" id="btn-back">Back</button>
+      <span id="pager-hint" class="hint" role="status"></span>
+      <button type="button" class="btn primary" id="btn-next">Next</button>
+    </div>
+  </main>
+
+  <aside class="assistant" id="assistant" aria-label="Assistant">
+    <div class="as-head">
+      <h2>Assistant</h2>
+      <span id="as-badge" class="badge">checking...</span>
+      <button type="button" class="btn small ghost as-close" id="as-close" aria-label="Close the assistant">Close</button>
+    </div>
+    <p class="as-ctx" id="as-ctx"></p>
+    <div id="as-offline" class="note warn" hidden></div>
+    <div id="as-log" class="as-log" role="log" aria-live="polite" aria-label="Conversation"></div>
+    <div class="as-sugg" id="as-sugg"></div>
+    <form id="as-form" class="as-form">
+      <label for="as-input" class="sr">Message for the assistant</label>
+      <textarea id="as-input" rows="2" maxlength="4000" placeholder="Write to the assistant (Enter to send, Shift+Enter for a new line)"></textarea>
+      <button type="submit" class="btn primary" id="as-send">Send</button>
+    </form>
+  </aside>
+</div>
+
+<button type="button" class="fab" id="as-open" aria-controls="assistant" aria-expanded="false">Assistant</button>
+
+{% include '_md_scripts.html' %}
+<script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+<script src="{{ url_for('static', filename='guided/guided.js') }}"></script>
+</body>
+</html>

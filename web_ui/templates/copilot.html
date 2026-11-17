@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Full-screen Copilot</title>
+<meta name="description" content="A single conversation with the assistant; tools and results appear as cards in the dialogue, the catalog sits in a side drawer.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="{{ url_for('static', filename='copilot/copilot.css') }}">
+</head>
+<body>
+{% include '_sitenav.html' %}
+<a class="skip" href="#composer-input">Skip to the message field</a>
+
+<header class="bar" role="banner">
+  <button type="button" id="drawer-btn" class="icon-btn" aria-controls="drawer" aria-expanded="true" aria-label="Show or hide the catalog">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="brand">Copilot</div>
+  <div class="seg" role="radiogroup" aria-label="Data modality" id="mod-seg"></div>
+  <div class="spacer"></div>
+  <span id="model-pill" class="pill pill-wait" role="status" aria-live="polite">Checking model...</span>
+</header>
+
+<div class="shell">
+  <aside id="drawer" class="drawer" aria-label="Catalog">
+    <div class="tabs" role="tablist" aria-label="Catalog">
+      <button type="button" role="tab" id="tab-algo" aria-controls="panel-algo" aria-selected="true">Algorithms</button>
+      <button type="button" role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1">Dataset</button>
+    </div>
+    <label class="visually-hidden" for="drawer-filter">Filter the list</label>
+    <input id="drawer-filter" class="field" type="search" placeholder="Filter..." autocomplete="off">
+    <div id="panel-algo" role="tabpanel" aria-labelledby="tab-algo" class="plist" tabindex="0"></div>
+    <div id="panel-data" role="tabpanel" aria-labelledby="tab-data" class="plist" hidden tabindex="0"></div>
+    <div id="upload-slot" class="upload-slot"></div>
+    <p class="hint">Click to add to the context; datasets can also be dragged into the conversation.</p>
+  </aside>
+  <div id="scrim" class="scrim" hidden></div>
+
+  <main class="stage" id="stage">
+    <div id="log" class="log" role="log" aria-live="polite" aria-label="Conversation"></div>
+
+    <div class="composer-wrap">
+      <div id="ctx" class="ctx" aria-label="Selected context"></div>
+      <div id="shortcuts" class="shortcuts" role="group" aria-label="Shortcuts without a model"></div>
+      <form id="composer" class="composer" autocomplete="off">
+        <label class="visually-hidden" for="composer-input">Write to the assistant</label>
+        <textarea id="composer-input" rows="1" placeholder="Describe your problem: data, goal, constraints..."></textarea>
+        <button type="submit" id="send" class="btn primary">Send</button>
+      </form>
+      <div class="foot"><button type="button" id="reset" class="link-btn">New conversation</button><span id="foot-note"></span></div>
+    </div>
+  </main>
+</div>
+
+{% include '_md_scripts.html' %}
+<script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+<script src="{{ url_for('static', filename='copilot/copilot.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Challenge: guess the algorithm</title>
+<meta name="description" content="Pick a dataset and a profile, guess which data augmentation algorithm is the best and compare yourself with the AugPilot recommendation, computed by removing that dataset from the knowledge base.">
+<link rel="stylesheet" href="{{ url_for('static', filename='evidence/evidence.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='challenge/challenge.css') }}">
+</head>
+<body class="ev-page ch-page">
+{% include '_sitenav.html' %}
+<a class="skip" href="#ch-main">Skip to content</a>
+
+<header class="ev-top">
+  <div>
+    <h1>Challenge: guess the best algorithm</h1>
+    <p>Pick a benchmark dataset and a priority profile, then try to guess which algorithm performed best. After “Reveal” you see the measured ranking and the recommendation AugPilot would have given if that dataset were not in its knowledge base.</p>
+  </div>
+</header>
+
+<main id="ch-main" class="ev-main" tabindex="-1">
+  <div id="ch-status" role="status" aria-live="polite" class="ev-status"></div>
+  <div id="ch-empty" class="ev-empty" hidden></div>
+
+  <div id="ch-app" hidden>
+    <section class="ev-card ch-setup" aria-labelledby="h-setup">
+      <h2 id="h-setup">1. Choose the match</h2>
+      <div class="ev-controls">
+        <div class="ev-field">
+          <span class="ev-lab" id="lab-mod">Modality</span>
+          <div class="ev-seg" role="radiogroup" aria-labelledby="lab-mod" id="seg-mod"></div>
+        </div>
+        <div class="ev-field" id="fld-level" hidden>
+          <span class="ev-lab" id="lab-level">Graph level</span>
+          <div class="ev-seg" role="radiogroup" aria-labelledby="lab-level" id="seg-level"></div>
+        </div>
+        <div class="ev-field">
+          <label class="ev-lab" for="sel-ds">Dataset</label>
+          <select id="sel-ds" class="ch-select"></select>
+        </div>
+        <div class="ev-field">
+          <span class="ev-lab" id="lab-prof">Priority profile</span>
+          <div class="ev-seg ev-seg-wrap" role="radiogroup" aria-labelledby="lab-prof" id="seg-prof"></div>
+        </div>
+      </div>
+      <p class="ev-sub" id="prof-hint"></p>
+      <p class="ev-sub ch-note" id="ds-note" hidden></p>
+    </section>
+
+    <section class="ev-card" aria-labelledby="h-guess">
+      <h2 id="h-guess">2. Which algorithm is the best for this profile?</h2>
+      <p class="ev-sub" id="guess-sub">No scores are shown here: the numbers appear only after “Reveal”.</p>
+      <div class="ch-chips" role="radiogroup" aria-labelledby="h-guess" id="chips"></div>
+      <div class="ch-actions">
+        <button type="button" class="ch-go" id="btn-go" disabled>Reveal</button>
+        <span class="ch-picked" id="picked" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section id="ch-result" aria-labelledby="h-result" hidden>
+      <h2 class="ch-h" id="h-result">3. The result</h2>
+      <div class="ch-verdict" id="verdict" role="status"></div>
+      <div class="ch-duo" id="duo"></div>
+      <section class="ev-card" id="ranking-card" aria-labelledby="h-rank" hidden>
+        <h2 id="h-rank">Measured ranking</h2>
+        <p class="ev-sub" id="rank-sub"></p>
+        <div id="rank-legend"></div>
+        <ol class="ch-rank" id="rank-list"></ol>
+      </section>
+    </section>
+
+    <section class="ev-card ch-board" aria-labelledby="h-board">
+      <h2 id="h-board">Your matches</h2>
+      <p class="ev-sub">The count stays in this browser only; it is not benchmark data.</p>
+      <div class="ch-board-row" id="board"></div>
+      <button type="button" class="ch-link" id="btn-reset">Reset the count</button>
+    </section>
+
+    <p class="ev-foot" id="ch-foot"></p>
+  </div>
+</main>
+
+<script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+<script src="{{ url_for('static', filename='challenge/challenge.js') }}"></script>
+</body>
+</html>

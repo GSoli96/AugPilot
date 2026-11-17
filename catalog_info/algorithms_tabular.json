@@ -1,0 +1,142 @@
+{
+  "smote": {
+    "what": "Oversampling by interpolating between neighbors of the minority class (SMOTE by Chawla et al., via imbalanced-learn).",
+    "good_for": "Imbalanced datasets with 2+ classes and numeric features; very fast, no GPU (TABULAR_STATO.md).",
+    "avoid_when": "With a single class imblearn is not applicable: the wrapper interpolates KNN neighbors (native, not imblearn). Other cases: not documented.",
+    "source": "TABULAR_STATO.md; algorithms_runner.py (run_smote); Algorithms/Algorithms.md (arXiv 1106.1813)",
+    "verified": false
+  },
+  "fair-smote": {
+    "what": "SMOTE that removes biased labels and rebalances examples by the sensitive attribute, equal between positive and negative class (FSE 2021).",
+    "good_for": "Reducing bias on sensitive attributes (sex, race, age) in datasets with a target of 2+ classes (Fair-SMOTE README).",
+    "avoid_when": "Datasets with a single class: the wrapper falls back to KNN interpolation without fairness (FALLBACK status). The target is assumed to be the last column.",
+    "source": "Algorithms/Fair-SMOTE-master/README.md; algorithms_runner.py (run_fair_smote); TABULAR_STATO.md",
+    "verified": true
+  },
+  "smote-cdnn": {
+    "what": "SMOTE followed by cleaning with Edited CDNN (hybrid multi-class sampling, imbalanced-learn API).",
+    "good_for": "Imbalanced multi-class datasets (the README mentions multi-class hybrid sampling). No performance is attributed here.",
+    "avoid_when": "Datasets with a single class: the wrapper uses SMOTE without CDNN (FALLBACK).",
+    "source": "Algorithms/SMOTE-CDNN-main/README.md; TABULAR_STATO.md",
+    "verified": true
+  },
+  "goggle": {
+    "what": "Generative model (ICLR 2023) that learns the relational structure between variables and generates data that respects it.",
+    "good_for": "Tabular data with dependencies between variables; allows adding prior knowledge and regularization on the dependencies (README).",
+    "avoid_when": "Not documented.",
+    "source": "Algorithms/GOGGLE-main/README.md; TABULAR_STATO.md",
+    "verified": false
+  },
+  "castgan": {
+    "what": "Cascaded GAN for realistic synthesis of tabular data (CasTGAN).",
+    "good_for": "Not documented beyond the paper title (realistic tabular synthesis).",
+    "avoid_when": "Not documented. The README mentions a *_train.csv file and optionally *_dtypes.pkl with the column types, recommended.",
+    "source": "Algorithms/CasTGAN-main/README.md",
+    "verified": false
+  },
+  "tabfairgan": {
+    "what": "WGAN for tabular data, with or without a fairness constraint.",
+    "good_for": "Generating synthetic data with a fairness constraint (README); without the constraint it only generates quality data.",
+    "avoid_when": "The fairness constraint requires a configuration with a sensitive attribute; the benchmark wrapper does not document it, not verified.",
+    "source": "Algorithms/TabFairGAN-main/README.md; TABULAR_STATO.md",
+    "verified": false
+  },
+  "cuts": {
+    "what": "Customizable tabular synthesis (ICML 2024): statistical and logical constraints can be imposed through a program.",
+    "good_for": "When constraints must be imposed on the generated data (README example: E[age|age>30]==40).",
+    "avoid_when": "In the benchmark the wrapper uses the Denoiser with one-hot encoded data; the use of constraints is not documented. Other limits: not documented.",
+    "source": "Algorithms/cuts-main/README.md; algorithms_runner.py (run_cuts)",
+    "verified": false
+  },
+  "tabular-argn": {
+    "what": "Autoregressive framework for tabular synthesis (TabularARGN), run with mostlyai-engine.",
+    "good_for": "Not documented beyond the paper (high fidelity, flexible). Reference implementation Apache-2.0.",
+    "avoid_when": "In envs/argn torch is CPU-only, so it runs on CPU (slower: 37.6 s on 49 rows, 1 epoch).",
+    "source": "Algorithms/paper-tabular-argn-main/README.md; TABULAR_STATO.md",
+    "verified": false
+  },
+  "prefair": {
+    "what": "Private synthetic generation (differential privacy, PrivBayes) that is also fair (PreFair, VLDB 2023).",
+    "good_for": "When differential privacy and fairness on a sensitive attribute are both needed.",
+    "avoid_when": "In the benchmark the sensitive attribute is chosen heuristically (column name sex/gender/race/age, otherwise the first column with few values), epsilon is fixed at 10, and it is slow (45.9 s on 49 rows) because of DataSynthesizer's multiprocessing.",
+    "source": "Algorithms/Prefair-main/readme.txt; TABULAR_STATO.md; algorithms_runner.py (run_prefair)",
+    "verified": true
+  },
+  "ddpm": {
+    "what": "TabDDPM: diffusion model for tabular data (ICML 2023).",
+    "good_for": "Not documented in the repo beyond the paper title.",
+    "avoid_when": "Not documented. The wrapper uses the last column as the target.",
+    "source": "Algorithms/tab-ddpm-main/README.md; workers/run_tab_ddpm_worker.py",
+    "verified": false
+  },
+  "ctabgan": {
+    "what": "CTAB-GAN baseline run from the TabDDPM repository (conditional GAN for tabular data).",
+    "good_for": "Not documented.",
+    "avoid_when": "Not documented. In the benchmark it runs via the TabDDPM worker, not from Algorithms/CTAB-GAN-Plus.",
+    "source": "workers/run_tab_ddpm_worker.py; algorithms_runner.py (run_tab_ddpm_family)",
+    "verified": false
+  },
+  "ctabgan-plus": {
+    "what": "CTAB-GAN+: GAN for tabular synthesis, improved version of CTAB-GAN (without the differential privacy part in this code).",
+    "good_for": "The repo has examples for classification (Adult) and regression (king).",
+    "avoid_when": "The README lists old dependencies (torch 1.9.1, sklearn 0.24.1, for BayesianGaussianMixture). In the benchmark it runs via the TabDDPM worker. Other cases: not documented.",
+    "source": "Algorithms/CTAB-GAN-Plus/README.md; workers/run_tab_ddpm_worker.py",
+    "verified": false
+  },
+  "tvae": {
+    "what": "VAE for tabular data, run from the TabDDPM repository (baseline).",
+    "good_for": "Not documented.",
+    "avoid_when": "Not documented.",
+    "source": "workers/run_tab_ddpm_worker.py; algorithms_runner.py (run_tab_ddpm_family)",
+    "verified": false
+  },
+  "syrfd": {
+    "what": "SyRFDRes: synthesis that uses relaxed functional dependencies (RFDs) discovered on the dataset as constraints.",
+    "good_for": "Datasets for which RFD files exist (discovered_rfds_processed folder); the v8 version scales to large datasets.",
+    "avoid_when": "Without RFD files for the dataset the run fails, unless --allow-fallback is set (then FALLBACK to empty RFDs). There is no README.",
+    "source": "Algorithms/SyRFDRes/syrfd_learning_v8_scalable.py; algorithms_runner.py (run_syrfd); TABULAR_STATO.md",
+    "verified": true
+  },
+  "tabsyn": {
+    "what": "Score-based diffusion in the latent space of a VAE for mixed-type tabular data (ICLR 2024).",
+    "good_for": "Mixed numeric and categorical data (paper title).",
+    "avoid_when": "In the benchmark the wrapper maps epochs onto VAE and diffusion steps (wrapper choice). Other limits: not documented.",
+    "source": "Algorithms/tabsyn-main/README.md; TABULAR_STATO.md",
+    "verified": false
+  },
+  "tabdiff": {
+    "what": "Diffusion model for mixed-type tabular data (ICLR 2025).",
+    "good_for": "Mixed numeric and categorical data (paper title).",
+    "avoid_when": "In the benchmark TabDiff's internal metrics and plots are disabled. Other limits: not documented.",
+    "source": "Algorithms/TabDiff/README.md; TABULAR_STATO.md",
+    "verified": false
+  },
+  "octree": {
+    "what": "Feature generation for tabular data via an LLM reasoning over decision trees (OCTree). It does not produce rows.",
+    "good_for": "Not documented as row augmentation.",
+    "avoid_when": "Requires an LLM (local Llama-2-7B, about 13 GB at 4 bit, or API). In the benchmark, without an LLM only a surrogate runs (FALLBACK), not OCTree.",
+    "source": "Algorithms/OCTree-main/README.md; TABULAR_STATO.md; workers/run_algo_worker.py",
+    "verified": true
+  },
+  "harmonic": {
+    "what": "Tabular synthesis with an LLM fine-tuned (LoRA) on instructions built from the k neighbors, to discover relations between rows; it aims to reduce privacy risk.",
+    "good_for": "Synthesis with large LLMs and privacy-risk assessment (README).",
+    "avoid_when": "Requires fine-tuning a 7B LLM: needs a GPU with more than 8 GB or quantization. Without an LLM only a surrogate runs (FALLBACK), not HARMONIC.",
+    "source": "Algorithms/HARMONIC-main/README.md; TABULAR_STATO.md",
+    "verified": true
+  },
+  "synthetic-llm": {
+    "what": "EPIC: prompting an LLM (OpenAI API) to synthesize samples of imbalanced classes in tabular classification.",
+    "good_for": "Tabular classification with imbalanced classes (title and README).",
+    "avoid_when": "Requires an OpenAI API key and paid online calls. Without them only a surrogate runs (FALLBACK), not EPIC.",
+    "source": "Algorithms/synthetic-tabular-LLM-main/README.md; TABULAR_STATO.md",
+    "verified": true
+  },
+  "kamino": {
+    "what": "Synthesis with differential privacy that respects the integrity constraints (Denial Constraints) of the dataset.",
+    "good_for": "Datasets for which Denial Constraints are available; preserves structure and correlations.",
+    "avoid_when": "The dataset's DC file is required (missing for some datasets). In the benchmark a Python reimplementation runs (workers/kamino_engine.py), not the original code (which requires Docker, PostgreSQL and conda): to be considered FALLBACK.",
+    "source": "Algorithms/kamino-master/README.md; TABULAR_STATO.md; the project notes; workers/run_algo_worker.py",
+    "verified": true
+  }
+}

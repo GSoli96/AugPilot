@@ -1,0 +1,705 @@
+{
+ "abalone9-18_min": {
+  "stats": {
+   "n_rows": 42,
+   "n_cols": 8,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 7,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 1,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 42
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/abalone9-18_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "adult_min": {
+  "stats": {
+   "n_rows": 11208,
+   "n_cols": 14,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 5,
+   "n_categorical_features": 8,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 11208
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Has 8 categorical columns (tests handling of mixed types). Large: scalability tests.",
+  "source": "script (datasets/adult_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "cleveland-0_vs_4_min": {
+  "stats": {
+   "n_rows": 13,
+   "n_cols": 14,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 13,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 9,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 13
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/cleveland-0_vs_4_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-1_vs_all_min": {
+  "stats": {
+   "n_rows": 211840,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 211840
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Large: scalability tests.",
+  "source": "script (datasets/covtype-1_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-2_vs_all_min": {
+  "stats": {
+   "n_rows": 283301,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 283301
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Large: scalability tests.",
+  "source": "script (datasets/covtype-2_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-3_vs_all_min": {
+  "stats": {
+   "n_rows": 35754,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 35754
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Large: scalability tests.",
+  "source": "script (datasets/covtype-3_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-4_vs_all_min": {
+  "stats": {
+   "n_rows": 2747,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 2747
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable.",
+  "source": "script (datasets/covtype-4_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-5_vs_all_min": {
+  "stats": {
+   "n_rows": 9493,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 9493
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable.",
+  "source": "script (datasets/covtype-5_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-6_vs_all_min": {
+  "stats": {
+   "n_rows": 17367,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 17367
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Large: scalability tests.",
+  "source": "script (datasets/covtype-6_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "covtype-7_vs_all_min": {
+  "stats": {
+   "n_rows": 20510,
+   "n_cols": 11,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 10,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 20510
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Large: scalability tests.",
+  "source": "script (datasets/covtype-7_vs_all_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "dermatology-6_min": {
+  "stats": {
+   "n_rows": 20,
+   "n_cols": 35,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 34,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 34,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 20
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/dermatology-6_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "ecoli-0_vs_1_min": {
+  "stats": {
+   "n_rows": 77,
+   "n_cols": 8,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 7,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 2,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "0.0": 77
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/ecoli-0_vs_1_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "ecoli1_min": {
+  "stats": {
+   "n_rows": 77,
+   "n_cols": 8,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 7,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 2,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1.0": 77
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/ecoli1_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "iris0_min": {
+  "stats": {
+   "n_rows": 49,
+   "n_cols": 5,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 4,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 2,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 49
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/iris0_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "kddcup-guess_passwd_vs_satan_min": {
+  "stats": {
+   "n_rows": 52,
+   "n_cols": 40,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 39,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 34,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 52
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/kddcup-guess_passwd_vs_satan_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Migraine_onevsrest_0_min": {
+  "stats": {
+   "n_rows": 136,
+   "n_cols": 22,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 21,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 20,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "0": 136
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Migraine_onevsrest_0_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Migraine_onevsrest_1_min": {
+  "stats": {
+   "n_rows": 60,
+   "n_cols": 22,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 21,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 20,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 60
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Migraine_onevsrest_1_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Migraine_onevsrest_2_min": {
+  "stats": {
+   "n_rows": 24,
+   "n_cols": 22,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 21,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 21,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 24
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Migraine_onevsrest_2_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Migraine_onevsrest_3_min": {
+  "stats": {
+   "n_rows": 20,
+   "n_cols": 22,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 21,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 20,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 20
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Migraine_onevsrest_3_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Migraine_onevsrest_4_min": {
+  "stats": {
+   "n_rows": 18,
+   "n_cols": 22,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 21,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 20,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 18
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Migraine_onevsrest_4_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Migraine_onevsrest_5_min": {
+  "stats": {
+   "n_rows": 14,
+   "n_cols": 22,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 21,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 21,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 14
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Migraine_onevsrest_5_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "new-thyroid1_min": {
+  "stats": {
+   "n_rows": 35,
+   "n_cols": 6,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 5,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 35
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/new-thyroid1_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "newthyroid2_min": {
+  "stats": {
+   "n_rows": 35,
+   "n_cols": 6,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 5,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 35
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/newthyroid2_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_0_min": {
+  "stats": {
+   "n_rows": 267,
+   "n_cols": 17,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 16,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 267
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_0_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_1_min": {
+  "stats": {
+   "n_rows": 282,
+   "n_cols": 17,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 16,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 282
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_1_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_2_min": {
+  "stats": {
+   "n_rows": 276,
+   "n_cols": 17,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 16,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 276
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_2_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_3_min": {
+  "stats": {
+   "n_rows": 290,
+   "n_cols": 17,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 16,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 290
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_3_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_4_min": {
+  "stats": {
+   "n_rows": 351,
+   "n_cols": 17,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 16,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 351
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_4_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_5_min": {
+  "stats": {
+   "n_rows": 297,
+   "n_cols": 17,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 16,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 297
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_5_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "Obesity_onevsrest_6_min": {
+  "stats": {
+   "n_rows": 324,
+   "n_cols": 15,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 14,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 13,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 324
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/Obesity_onevsrest_6_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "page-blocks-1-3_vs_4_min": {
+  "stats": {
+   "n_rows": 28,
+   "n_cols": 8,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 7,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 28
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/page-blocks-1-3_vs_4_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "pima_min": {
+  "stats": {
+   "n_rows": 267,
+   "n_cols": 9,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 8,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 267
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/pima_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "susy_lowlevel8_min": {
+  "stats": {
+   "n_rows": 2287827,
+   "n_cols": 9,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 8,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 2287827
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Large: scalability tests.",
+  "source": "script (datasets/susy_lowlevel8_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "transfusion_min": {
+  "stats": {
+   "n_rows": 177,
+   "n_cols": 5,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 4,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 0,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 177
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/transfusion_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "vowel0_min": {
+  "stats": {
+   "n_rows": 89,
+   "n_cols": 12,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 11,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 2,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 89
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/vowel0_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "yeast1_min": {
+  "stats": {
+   "n_rows": 429,
+   "n_cols": 9,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 8,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 2,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 429
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/yeast1_min.csv); class column = last column as in algorithms_runner.py"
+ },
+ "yeast3_min": {
+  "stats": {
+   "n_rows": 163,
+   "n_cols": 9,
+   "class_column": "class",
+   "class_column_is_named_class": true,
+   "n_numeric_features": 8,
+   "n_categorical_features": 0,
+   "n_numeric_low_cardinality_le10": 2,
+   "n_missing_values": 0,
+   "n_classes": 1,
+   "class_distribution": {
+    "1": 163
+   },
+   "imbalance_ratio": 1.0
+  },
+  "uses": "Single class (minority-class dataset, _min suffix): suited to generating synthetic data for that class; oversampling across classes is not applicable. Small: quick tests.",
+  "source": "script (datasets/yeast3_min.csv); class column = last column as in algorithms_runner.py"
+ }
+}

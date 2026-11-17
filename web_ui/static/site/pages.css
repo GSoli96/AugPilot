@@ -1,0 +1,55 @@
+/* pages.css - tema chiaro/scuro (prefers-color-scheme) delle pagine Macchine e Assistente, allineato alle sezioni nuove
+ * (/copilot, /guided, /catalog, /control): stessi colori, stessa barra di navigazione (_sitenav.html + site.css).
+ * Definisce le classi usate dal markup di queste due pagine (card, btn-*, badge-*, ...). Tutto sotto body.pg. */
+body.pg {
+  --bg: #f3f5f8; --panel: #ffffff; --panel2: #eef1f6; --line: #d5dbe5; --text: #161c28; --muted: #4f5b70;
+  --accent: #1f4fd8; --accent-t: #ffffff; --ok: #0b6b3a; --okbg: #dff3e7; --warn: #7a4b00; --warnbg: #fff0cf;
+  --bad: #9b1c1c; --badbg: #fde2e2; --focus: #1f4fd8;
+  margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, "Segoe UI", sans-serif;
+  min-height: 100dvh; display: flex; flex-direction: column; color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  body.pg {
+    --bg: #0f131b; --panel: #171c27; --panel2: #202737; --line: #303a50; --text: #e8ecf4; --muted: #a3aec4;
+    --accent: #7ea2ff; --accent-t: #0b1020; --ok: #7fe0a6; --okbg: #14301f; --warn: #ffd27a; --warnbg: #3a2c0d;
+    --bad: #ff9d9d; --badbg: #3d1717; --focus: #9db8ff; color-scheme: dark;
+  }
+}
+body.pg * { box-sizing: border-box; }
+body.pg a { color: var(--accent); }
+body.pg :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* intestazione di pagina (come le sezioni nuove: titolo + sottotitolo, stato a destra) */
+body.pg .pg-head { display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+body.pg .pg-head h1 { margin: 0; font-size: 1.15rem; }
+body.pg .pg-head p { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; max-width: 70ch; }
+body.pg .pg-status { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* schede */
+body.pg .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+body.pg .card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; margin-bottom: 8px; }
+body.pg .card-header h2 { margin: 0; font-size: 1rem; }
+body.pg .header-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+/* pulsanti */
+body.pg .btn { font: inherit; border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 6px; padding: 8px 12px; cursor: pointer; min-height: 36px; }
+body.pg .btn:hover:not(:disabled) { border-color: var(--accent); }
+body.pg .btn-primary { background: var(--accent); color: var(--accent-t); border-color: var(--accent); font-weight: 600; }
+body.pg .btn-outline { background: transparent; }
+body.pg .btn-danger { color: var(--bad); border-color: var(--bad); background: transparent; }
+body.pg .btn-sm { padding: 4px 10px; min-height: 30px; font-size: 12.5px; }
+body.pg .btn-xs { padding: 2px 8px; min-height: 26px; font-size: 12px; }
+body.pg .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* etichette di stato */
+body.pg .badge { display: inline-block; border-radius: 999px; padding: 1px 10px; font-size: 12px; border: 1px solid var(--line); background: var(--panel2); color: var(--text); }
+body.pg .badge-running { background: var(--okbg); color: var(--ok); border-color: var(--ok); }
+body.pg .badge-idle { background: var(--warnbg); color: var(--warn); border-color: var(--warn); }
+body.pg .badge-device { color: var(--muted); }
+
+/* campi */
+body.pg input:not([type=checkbox]):not([type=radio]):not([type=file]), body.pg select, body.pg textarea {
+  font: inherit; padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); min-height: 36px; max-width: 100%;
+}
+body.pg input[type=checkbox], body.pg input[type=radio] { accent-color: var(--accent); }
+body.pg details > summary { cursor: pointer; }

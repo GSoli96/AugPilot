@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmark evidence</title>
+<meta name="description" content="What the benchmark measured: runs, datasets and algorithms covered, quality versus time and score by dataset and algorithm.">
+<link rel="stylesheet" href="{{ url_for('static', filename='evidence/evidence.css') }}">
+</head>
+<body class="ev-page">
+{% include '_sitenav.html' %}
+<a class="skip" href="#ev-main">Skip to content</a>
+
+<header class="ev-top">
+  <div>
+    <h1>Benchmark evidence</h1>
+    <p>What the recommendations are based on: the measured runs, by modality. Where there is no evidence it says so, without filling the gaps.</p>
+  </div>
+</header>
+
+<main id="ev-main" class="ev-main" tabindex="-1">
+  <section class="ev-controls" aria-label="Filters">
+    <div class="ev-field">
+      <span class="ev-lab" id="lab-mod">Modality</span>
+      <div class="ev-seg" role="radiogroup" aria-labelledby="lab-mod" id="seg-mod"></div>
+    </div>
+    <div class="ev-field" id="fld-level" hidden>
+      <span class="ev-lab" id="lab-level">Graph level</span>
+      <div class="ev-seg" role="radiogroup" aria-labelledby="lab-level" id="seg-level"></div>
+    </div>
+    <div class="ev-field">
+      <span class="ev-lab" id="lab-prof">Score profile</span>
+      <div class="ev-seg ev-seg-wrap" role="radiogroup" aria-labelledby="lab-prof" id="seg-prof"></div>
+    </div>
+  </section>
+
+  <div id="ev-status" role="status" aria-live="polite" class="ev-status"></div>
+  <div id="ev-empty" class="ev-empty" hidden></div>
+
+  <div id="ev-body" hidden>
+    <section class="ev-kpis" aria-label="Coverage" id="ev-kpis"></section>
+
+    <section class="ev-card" aria-labelledby="h-scatter">
+      <h2 id="h-scatter">Quality versus time</h2>
+      <p class="ev-sub" id="sub-scatter"></p>
+      <div class="ev-legend" id="scatter-legend" role="group" aria-label="Algorithm families (click to hide or show)"></div>
+      <div class="ev-chart" id="scatter"></div>
+      <details class="ev-table">
+        <summary>Chart data table</summary>
+        <div class="ev-scroll" id="scatter-table"></div>
+      </details>
+    </section>
+
+    <section class="ev-card" aria-labelledby="h-heat">
+      <h2 id="h-heat">Score by dataset and algorithm</h2>
+      <p class="ev-sub" id="sub-heat"></p>
+      <div class="ev-ramp" id="heat-ramp" aria-hidden="true"></div>
+      <div class="ev-scroll ev-heatwrap" id="heat"></div>
+    </section>
+
+    <p class="ev-foot" id="ev-foot"></p>
+  </div>
+</main>
+<div id="ev-tip" class="ev-tip" role="tooltip" hidden></div>
+
+<script src="{{ url_for('static', filename='evidence/evidence.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machines - Distributed execution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='site/pages.css') }}">
+    <style>
+        .mc-wrap { padding: 20px 28px; display: flex; flex-direction: column; gap: 20px; }
+        @media (max-width: 800px) { .mc-wrap { padding: 12px; } }
+        .mc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .mc-table th, .mc-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+        .mc-table th { color: var(--muted); font-weight: 500; font-size: 12px; }
+        .mc-table td.mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+        .st { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; border: 1px solid var(--line); }
+        .st.non_verificata { color: var(--muted); }
+        .st.online { color: var(--ok); border-color: var(--ok); }
+        .st.offline { color: var(--warn); border-color: var(--warn); }
+        .st.errore { color: var(--bad); border-color: var(--bad); }
+        .st-msg { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; max-width: 280px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px 16px; }
+        .form-grid label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+        .form-grid input[type=text], .form-grid input[type=number], .form-grid select, .form-grid textarea { width: 100%; }
+        .form-grid textarea { background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 8px; font-family: inherit; }
+        .form-grid .wide { grid-column: 1 / -1; }
+        .field-err { color: var(--bad); font-size: 11px; min-height: 14px; }
+        .hint { font-size: 12px; color: var(--muted); }
+        .banner { border: 1px solid var(--warn); background: var(--warnbg); padding: 10px 14px; border-radius: 10px; font-size: 13px; }
+        .banner.err { border-color: var(--bad); background: var(--badbg); }
+        .banner.ok { border-color: var(--ok); background: var(--okbg); }
+        .placeholder { border: 2px dashed var(--warn); }
+        .tag-todo { background: var(--warnbg); color: var(--warn); padding: 2px 10px; border-radius: 999px; font-size: 11px; margin-left: 8px; }
+        .prof { font-size: 12px; font-family: ui-monospace, Consolas, monospace; color: var(--muted); line-height: 1.6; }
+        .prof b { color: var(--text); font-weight: 500; }
+                .row-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+        .bulk { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: start; }
+        @media (max-width: 800px) { .bulk { grid-template-columns: 1fr; } }
+        .table-scroll { overflow-x: auto; }
+        .fl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
+        .fl-m { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); }
+        .fl-m h3 { margin: 0 0 4px; font-size: 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .fl-m .meta { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+        .st.libera { color: var(--ok); border-color: var(--ok); }
+        .st.occupata { color: var(--accent); border-color: var(--accent); }
+        .st.inattiva, .st.sconosciuta { color: var(--muted); }
+        .st.non_raggiungibile { color: var(--warn); border-color: var(--warn); }
+        .fl-job { padding: 6px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+        .fl-job .jn { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+        .fl-job .jn b { font-weight: 600; }
+        .fl-bar { height: 7px; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin: 4px 0 2px; }
+        .fl-bar i { display: block; height: 100%; background: var(--accent); }
+        .fl-bar.done i { background: var(--ok); }
+        .fl-job .ev { color: var(--muted); font-size: 11.5px; }
+    </style>
+</head>
+<body class="pg">
+    {% include '_sitenav.html' %}
+    <header class="pg-head">
+        <div>
+            <h1>Lab machines</h1>
+            <p>Distributed execution: inventory and connections (task distribution is not defined yet)</p>
+        </div>
+        <div class="pg-status">
+            <span id="count-badge" class="badge badge-device">0 machines</span>
+        </div>
+    </header>
+
+    <div class="mc-wrap">
+        <div id="msg" class="banner" style="display:none"></div>
+
+        <section class="card">
+            <div class="card-header"><h2><i class="fa-solid fa-list"></i> Machine list</h2>
+                <div class="header-actions">
+                    <button class="btn btn-sm btn-primary" onclick="openForm(null)"><i class="fa-solid fa-plus"></i> Add</button>
+                    <button class="btn btn-sm btn-secondary" onclick="document.getElementById('bulk-card').style.display='block'"><i class="fa-solid fa-layer-group"></i> Add several machines</button>
+                    <button class="btn btn-sm btn-outline" onclick="doExport()"><i class="fa-solid fa-file-export"></i> Export JSON</button>
+                    <label class="btn btn-sm btn-outline" style="margin:0;cursor:pointer"><i class="fa-solid fa-file-import"></i> Import JSON
+                        <input type="file" id="imp-file" accept="application/json,.json" style="display:none" onchange="doImport(this)"></label>
+                </div>
+            </div>
+            <p class="hint">Addresses and paths are saved here, never passwords or key contents. Authentication uses the path of a private key or ssh-agent. Connections start from this PC.</p>
+            <div id="ssh-warn" class="banner" style="display:none;margin-bottom:10px"></div>
+            <div class="table-scroll">
+                <table class="mc-table">
+                    <thead><tr><th>Name</th><th>Host : port</th><th>User</th><th>Declared resources</th><th>Status</th><th>Enabled</th><th>Actions</th></tr></thead>
+                    <tbody id="rows"><tr><td colspan="7" class="hint">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card" id="bulk-card" style="display:none">
+            <div class="card-header"><h2><i class="fa-solid fa-layer-group"></i> How many machines are there?</h2></div>
+            <div class="bulk">
+                <div><label class="hint">Number</label><input type="number" id="bulk-n" min="1" max="50" value="3">
+                    <button class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="buildBulk()">Generate rows</button></div>
+                <div>
+                    <div class="table-scroll"><table class="mc-table" id="bulk-table" style="display:none">
+                        <thead><tr><th>Name</th><th>IP / host</th><th>Port</th><th>User</th><th>Authentication</th><th>Key path</th></tr></thead>
+                        <tbody id="bulk-body"></tbody></table></div>
+                    <div id="bulk-err" class="field-err"></div>
+                    <button id="bulk-save" class="btn btn-sm btn-primary" style="display:none;margin-top:8px" onclick="saveBulk()">Save all</button>
+                    <p class="hint">The other details (GPU, RAM, remote folder, labels) are filled in later with "Edit" or "Profile machine". Rows that are already valid are saved one by one; those with errors stay in the table.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="form-card" style="display:none">
+            <div class="card-header"><h2 id="form-title"><i class="fa-solid fa-pen"></i> Machine</h2></div>
+            <form id="mform" class="form-grid" onsubmit="saveForm(event)" autocomplete="off">
+                <div><label>Name *</label><input type="text" id="f-name" maxlength="60"><div class="field-err" id="e-name"></div></div>
+                <div><label>IP address or host *</label><input type="text" id="f-host" placeholder="10.0.0.20"><div class="field-err" id="e-host"></div></div>
+                <div><label>SSH port</label><input type="number" id="f-port" value="22" min="1" max="65535"><div class="field-err" id="e-port"></div></div>
+                <div><label>User *</label><input type="text" id="f-user"><div class="field-err" id="e-user"></div></div>
+                <div><label>Authentication</label>
+                    <select id="f-auth" onchange="authChanged()"><option value="agent">ssh-agent</option><option value="key">Private key (path)</option></select>
+                    <div class="field-err" id="e-auth_method"></div></div>
+                <div id="key-wrap"><label>Private key path</label><input type="text" id="f-key" placeholder="C:\Users\name\.ssh\id_ed25519"><div class="field-err" id="e-key_path"></div></div>
+                <div><label>Host key check</label>
+                    <select id="f-pol"><option value="strict">Strict (the key must already be in known_hosts)</option><option value="accept-new">Accept new keys (accept-new)</option></select>
+                    <div class="hint">Choose accept-new only if you trust the network.</div></div>
+                <div><label>Operating system</label>
+                    <select id="f-os"><option>linux</option><option>windows</option><option>macos</option><option value="altro">other</option></select></div>
+                <div><label>Number of GPUs</label><input type="number" id="f-gpun" value="0" min="0" max="64"><div class="field-err" id="e-gpu_count"></div></div>
+                <div><label>GPU model</label><input type="text" id="f-gpum" placeholder="RTX 4090"><div class="field-err" id="e-gpu_model"></div></div>
+                <div><label>RAM (GB)</label><input type="number" id="f-ram" min="0" step="any"><div class="field-err" id="e-ram_gb"></div></div>
+                <div><label>Remote working directory</label><input type="text" id="f-wd" placeholder="/home/user/DataAugmentation"><div class="field-err" id="e-workdir"></div></div>
+                <div class="wide"><label>Labels (comma-separated)</label><input type="text" id="f-labels" placeholder="gpu, lab"><div class="field-err" id="e-labels"></div></div>
+                <div class="wide"><label>Notes</label><textarea id="f-notes" rows="2"></textarea><div class="field-err" id="e-notes"></div></div>
+                <div class="wide"><label style="display:inline"><input type="checkbox" id="f-en" checked> Enabled</label></div>
+                <div class="wide"><div class="field-err" id="e-_"></div>
+                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="closeForm()">Cancel</button></div>
+            </form>
+        </section>
+
+        <section class="card" id="fleet-card">
+            <div class="card-header"><h2><i class="fa-solid fa-gauge-high"></i> Distributed benchmark <span class="tag-todo" style="background:var(--panel2);color:var(--muted)">read-only</span></h2>
+                <div class="header-actions">
+                    <a class="btn btn-sm btn-outline" id="fleet-dash" href="http://127.0.0.1:8765" target="_blank" rel="noopener noreferrer" style="text-decoration:none"><i class="fa-solid fa-up-right-from-square"></i> Orchestrator dashboard</a>
+                    <button class="btn btn-sm btn-secondary" onclick="loadFleet()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                </div>
+            </div>
+            <p class="hint">Status read from the orchestrator (file <code>fleet.json</code>): this page does not send any command to the machines. To start, stop or resume jobs, use the orchestrator.</p>
+            <div id="fleet-msg" class="banner" style="display:none;margin:8px 0"></div>
+            <div id="fleet-alerts" class="hint" style="margin:6px 0"></div>
+            <div id="fleet" class="fl-grid"><p class="hint">Loading...</p></div>
+        </section>
+
+        <section class="card placeholder">
+            <div class="card-header"><h2><i class="fa-solid fa-diagram-project"></i> Task assignment <span class="tag-todo">TO BE DEFINED</span></h2></div>
+            <p class="hint">Placeholder: no distribution logic is implemented. The machine selection and the table only fix the interface; nothing is run.</p>
+            <label class="hint">Enabled machines that would take part</label>
+            <div id="enabled-list" style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin:6px 0 14px">-</div>
+            <div class="table-scroll">
+                <table class="mc-table">
+                    <thead><tr><th>Algorithm</th><th>Dataset</th><th>Machine</th></tr></thead>
+                    <tbody><tr><td colspan="3" class="hint">No assignment: to be defined.</td></tr></tbody>
+                </table>
+            </div>
+            <button class="btn btn-sm btn-secondary" disabled title="To be defined" style="margin-top:10px">Start distributed run (not available)</button>
+        </section>
+    </div>
+
+<script>
+const $ = id => document.getElementById(id);
+let machines = [], editingId = null;
+const FIELDS = ['name','host','port','user','auth_method','key_path','host_key_policy','os','gpu_count','gpu_model','ram_gb','workdir','labels','notes'];
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+function note(text, kind) {
+    const b = $('msg'); b.className = 'banner' + (kind ? ' ' + kind : ''); b.textContent = text; b.style.display = 'block';
+    if (kind === 'ok') setTimeout(() => { if (b.textContent === text) b.style.display = 'none'; }, 5000);
+}
+async function api(method, url, body) {
+    const opt = { method, headers: {} };
+    if (body !== undefined) { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
+    const r = await fetch(url, opt);
+    let j = {}; try { j = await r.json(); } catch (e) {}
+    if (!r.ok || j.ok === false) { const e = new Error(j.error || ('HTTP ' + r.status)); e.fields = j.fields; throw e; }
+    return j;
+}
+
+async function load() {
+    try {
+        const j = await api('GET', '/api/machines');
+        machines = j.machines;
+        $('count-badge').textContent = j.count + (j.count === 1 ? ' machine' : ' machines') + ' (' + j.enabled_count + ' enabled)';
+        const w = $('ssh-warn');
+        if (!j.ssh_client) { w.style.display = 'block'; w.textContent = 'ssh client not found in the PATH of this PC: "Check connection" only checks the TCP port and "Profile machine" is not available.'; }
+        else w.style.display = 'none';
+        render();
+    } catch (e) { note('Cannot read the machines: ' + e.message, 'err'); $('rows').innerHTML = ''; }
+}
+
+function render() {
+    const tb = $('rows');
+    if (!machines.length) tb.innerHTML = '<tr><td colspan="7" class="hint">No machines registered. Use "Add" or "Add several machines".</td></tr>';
+    else tb.innerHTML = machines.map(m => {
+        const st = m.status || {state: 'non_verificata'};
+        const res = [m.gpu_count ? m.gpu_count + 'x ' + (m.gpu_model || 'GPU') : 'no GPU', m.ram_gb != null ? m.ram_gb + ' GB RAM' : null, m.os].filter(Boolean).join(' - ');
+        const labels = (m.labels || []).map(l => '<span class="st non_verificata">' + esc(l) + '</span>').join(' ');
+        return '<tr><td><b>' + esc(m.name) + '</b><div>' + labels + '</div></td>'
+            + '<td class="mono">' + esc(m.host) + ':' + esc(m.port) + '</td><td class="mono">' + esc(m.user) + '</td>'
+            + '<td>' + esc(res) + '</td>'
+            + '<td><span class="st ' + esc(st.state) + '">' + esc(stLabel(st.state)) + '</span>'
+            + (st.message ? '<span class="st-msg">' + esc(st.message) + '</span>' : '')
+            + (st.checked_at ? '<span class="st-msg">' + esc(st.checked_at) + '</span>' : '') + '</td>'
+            + '<td><input type="checkbox" ' + (m.enabled ? 'checked' : '') + ' onchange="toggleEn(\'' + esc(m.id) + '\', this.checked)"></td>'
+            + '<td><div class="row-actions">'
+            + '<button class="btn btn-xs btn-secondary" onclick="doCheck(\'' + esc(m.id) + '\', this)">Check connection</button>'
+            + '<button class="btn btn-xs btn-secondary" onclick="doProfile(\'' + esc(m.id) + '\', this)">Profile machine</button>'
+            + '<button class="btn btn-xs btn-outline" onclick="openForm(\'' + esc(m.id) + '\')">Edit</button>'
+            + '<button class="btn btn-xs btn-danger" onclick="doDelete(\'' + esc(m.id) + '\')">Remove</button></div>'
+            + (m.profile ? profHtml(m.profile) : '') + '</td></tr>';
+    }).join('');
+    const en = machines.filter(m => m.enabled);
+    $('enabled-list').innerHTML = en.length ? en.map(m => '<label><input type="checkbox" checked disabled> ' + esc(m.name) + '</label>').join('') : 'No machines enabled.';
+}
+
+function profHtml(p) {
+    const l = [];
+    if (p.system) l.push('<b>System</b> ' + esc(p.system));
+    if (p.python) l.push('<b>Python</b> ' + esc(p.python));
+    if ((p.gpus || []).length) p.gpus.forEach((g, i) => l.push('<b>GPU ' + i + '</b> ' + esc(g.name) + ' - ' + esc(g.mem_free_mb) + ' / ' + esc(g.mem_total_mb) + ' MB free'));
+    else l.push('<b>GPU</b> none detected (nvidia-smi missing or no GPU)');
+    if (p.ram_total_mb != null) l.push('<b>RAM</b> ' + esc(p.ram_available_mb) + ' / ' + esc(p.ram_total_mb) + ' MB available');
+    if (p.disk_total_gb != null) l.push('<b>Disk (home)</b> ' + esc(p.disk_free_gb) + ' / ' + esc(p.disk_total_gb) + ' GB free');
+    Object.entries(p.errors || {}).forEach(([k, v]) => l.push('<span style="color:var(--bad)">' + esc(k) + ': ' + esc(v) + '</span>'));
+    return '<details style="margin-top:6px"><summary class="hint" style="cursor:pointer">Profile (' + esc(p.collected_at) + ')</summary><div class="prof">' + l.join('<br>') + '</div></details>';
+}
+
+async function toggleEn(id, v) {
+    try { await api('PUT', '/api/machines/' + id, {enabled: v}); await load(); } catch (e) { note(e.message, 'err'); await load(); }
+}
+async function doCheck(id, btn) {
+    btn.disabled = true; const t = btn.textContent; btn.textContent = 'Checking...';
+    try { await api('POST', '/api/machines/' + id + '/check'); } catch (e) { note('Check failed: ' + e.message, 'err'); }
+    await load();
+}
+async function doProfile(id, btn) {
+    btn.disabled = true; btn.textContent = 'Profiling...';
+    try { await api('POST', '/api/machines/' + id + '/profile'); note('Profile saved.', 'ok'); }
+    catch (e) { note('Profiling failed: ' + e.message, 'err'); }
+    await load();
+}
+async function doDelete(id) {
+    const m = machines.find(x => x.id === id);
+    if (!confirm('Remove the machine "' + (m ? m.name : id) + '"? This cannot be undone.')) return;
+    try { await api('DELETE', '/api/machines/' + id); note('Machine removed.', 'ok'); } catch (e) { note(e.message, 'err'); }
+    await load();
+}
+
+// --- form singolo ---
+function authChanged() { $('key-wrap').style.display = $('f-auth').value === 'key' ? '' : 'none'; }
+function clearErrs() { document.querySelectorAll('.field-err').forEach(e => { if (!e.closest('#bulk-card')) e.textContent = ''; }); }
+function openForm(id) {
+    editingId = id; clearErrs();
+    const m = id ? machines.find(x => x.id === id) : null;
+    $('form-title').innerHTML = '<i class="fa-solid fa-pen"></i> ' + (m ? 'Edit: ' + esc(m.name) : 'New machine');
+    const v = (k, d) => m && m[k] != null ? m[k] : d;
+    $('f-name').value = v('name', ''); $('f-host').value = v('host', ''); $('f-port').value = v('port', 22); $('f-user').value = v('user', '');
+    $('f-auth').value = v('auth_method', 'agent'); $('f-key').value = v('key_path', ''); $('f-pol').value = v('host_key_policy', 'strict');
+    $('f-os').value = v('os', 'linux'); $('f-gpun').value = v('gpu_count', 0); $('f-gpum').value = v('gpu_model', '');
+    $('f-ram').value = v('ram_gb', ''); $('f-wd').value = v('workdir', ''); $('f-labels').value = (v('labels', []) || []).join(', ');
+    $('f-notes').value = v('notes', ''); $('f-en').checked = m ? !!m.enabled : true;
+    authChanged(); $('form-card').style.display = 'block'; $('form-card').scrollIntoView({behavior: 'smooth'});
+}
+function closeForm() { $('form-card').style.display = 'none'; editingId = null; }
+function readForm() {
+    return { name: $('f-name').value, host: $('f-host').value, port: $('f-port').value, user: $('f-user').value,
+        auth_method: $('f-auth').value, key_path: $('f-key').value, host_key_policy: $('f-pol').value, os: $('f-os').value,
+        gpu_count: $('f-gpun').value, gpu_model: $('f-gpum').value, ram_gb: $('f-ram').value, workdir: $('f-wd').value,
+        labels: $('f-labels').value, notes: $('f-notes').value, enabled: $('f-en').checked };
+}
+async function saveForm(ev) {
+    ev.preventDefault(); clearErrs();
+    try {
+        if (editingId) await api('PUT', '/api/machines/' + editingId, readForm()); else await api('POST', '/api/machines', readForm());
+        closeForm(); note('Machine saved.', 'ok'); await load();
+    } catch (e) {
+        if (e.fields) Object.entries(e.fields).forEach(([k, v]) => { const el = $('e-' + k); if (el) el.textContent = v; else $('e-_').textContent += k + ': ' + v + ' '; });
+        else $('e-_').textContent = e.message;
+    }
+}
+
+// --- inserimento di piu' macchine ---
+function buildBulk() {
+    const n = Math.max(1, Math.min(50, parseInt($('bulk-n').value) || 1));
+    let h = '';
+    for (let i = 0; i < n; i++) h += '<tr><td><input type="text" class="b-name" value="machine-' + (i + 1) + '"></td><td><input type="text" class="b-host" placeholder="192.168.1.' + (20 + i) + '"></td>'
+        + '<td><input type="number" class="b-port" value="22" style="width:80px"></td><td><input type="text" class="b-user"></td>'
+        + '<td><select class="b-auth"><option value="agent">ssh-agent</option><option value="key">key</option></select></td><td><input type="text" class="b-key" placeholder="key only"></td></tr>';
+    $('bulk-body').innerHTML = h; $('bulk-table').style.display = ''; $('bulk-save').style.display = '';
+}
+async function saveBulk() {
+    const rows = [...$('bulk-body').children]; const errs = []; let ok = 0;
+    for (const tr of rows) {
+        const g = c => tr.querySelector(c).value;
+        const body = { name: g('.b-name'), host: g('.b-host'), port: g('.b-port'), user: g('.b-user'), auth_method: g('.b-auth'), key_path: g('.b-key') };
+        try { await api('POST', '/api/machines', body); tr.remove(); ok++; }
+        catch (e) { errs.push((body.name || '?') + ': ' + (e.fields ? Object.entries(e.fields).map(([k, v]) => k + ' ' + v).join(', ') : e.message)); }
+    }
+    $('bulk-err').textContent = errs.join(' | ');
+    if (ok) note(ok + (ok === 1 ? ' machine saved.' : ' machines saved.') + (errs.length ? ' Some rows have errors.' : ''), errs.length ? '' : 'ok');
+    await load();
+}
+
+// --- import / export ---
+function doExport() { window.location = '/api/machines/export'; }
+async function doImport(inp) {
+    const f = inp.files[0]; if (!f) return;
+    try {
+        const data = JSON.parse(await f.text());
+        const j = await api('POST', '/api/machines/import', data);
+        note('Imported ' + j.imported + (j.imported === 1 ? ' machine.' : ' machines.'), 'ok');
+    } catch (e) {
+        note('Import rejected (nothing was imported): ' + (e.fields ? Object.entries(e.fields).map(([k, v]) => k + ': ' + v).join(' | ') : e.message), 'err');
+    }
+    inp.value = ''; await load();
+}
+load();
+// --- benchmark distribuito (sola lettura) ---
+const ST_LABEL = { non_verificata: 'unverified', online: 'online', offline: 'offline', errore: 'error', libera: 'free', occupata: 'busy', inattiva: 'idle', sconosciuta: 'unknown', sconosciuto: 'unknown', non_raggiungibile: 'unreachable' };
+function stLabel(s) { s = String(s == null ? '' : s); return ST_LABEL[s.replace(' ', '_')] || s.replace('_', ' '); }
+function fmtAge(s) { if (s == null) return ''; if (s < 90) return s + ' s ago'; if (s < 5400) return Math.round(s / 60) + ' min ago'; return Math.round(s / 3600) + ' h ago'; }
+const JSTATE = { running: 'running', done: 'done', stopped: 'stopped', failed: 'failed', pending: 'queued', queued: 'queued', sconosciuto: 'unknown' };
+function jobHtml(j) {
+    const known = j.total != null && j.total > 0;
+    const pct = known ? Math.min(100, Math.round(100 * j.done / j.total)) : (j.state === 'done' ? 100 : 0);
+    const txt = known ? j.done + ' / ' + j.total + ' (' + pct + '%)' : (j.state === 'done' ? 'done' : 'progress not reported');
+    const ev = j.last_event ? 'last event: ' + esc(j.last_event.kind) + (j.last_event.ts ? ' at ' + esc(String(j.last_event.ts).replace('T', ' ').slice(11, 19)) : '') : 'no event recorded';
+    return '<div class="fl-job"><div class="jn"><b>' + esc(j.name) + '</b><span class="st ' + (j.state === 'done' ? 'online' : j.state === 'running' ? 'occupata' : 'offline') + '">' + esc(JSTATE[j.state] || j.state) + '</span></div>'
+        + '<div class="fl-bar ' + (j.state === 'done' ? 'done' : '') + '" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '" aria-label="Progress of ' + esc(j.name) + '"><i style="width:' + pct + '%"></i></div>'
+        + '<div>' + esc(txt) + (j.restarts ? ' - restarts: ' + esc(j.restarts) : '') + '</div><div class="ev">' + ev + '</div></div>';
+}
+function machHtml(m) {
+    const gpu = (m.gpus || []).map(g => esc(g.name) + (g.util != null ? ' (usage ' + Math.round(g.util) + '%)' : '')).join(', ')
+        || ((m.partitions || []).length ? m.partitions.map(p => esc(p.name) + ': ' + esc(p.gpus_free) + '/' + esc(p.gpus_total) + ' GPUs free' + (p.gpu_model ? ' (' + esc(p.gpu_model) + ')' : '')).join('; ') : 'no GPU detected');
+    const jobs = (m.jobs || []).length ? m.jobs.map(jobHtml).join('') : '<p class="hint" style="margin:6px 0 0">No jobs.</p>';
+    return '<div class="fl-m"><h3>' + esc(m.name) + ' <span class="st ' + esc(String(m.state).replace(' ', '_')) + '">' + esc(stLabel(m.state)) + '</span></h3>'
+        + '<p class="meta">' + gpu + '</p>' + jobs + '</div>';
+}
+async function loadFleet() {
+    const msg = $('fleet-msg'), box = $('fleet');
+    try {
+        const r = await fetch('/api/machines/fleet'); const j = await r.json();
+        if (j.dashboard_url) $('fleet-dash').href = j.dashboard_url;
+        if (!j.available) { box.innerHTML = ''; msg.className = 'banner'; msg.textContent = j.message || 'Status unavailable.'; msg.style.display = 'block'; $('fleet-alerts').textContent = ''; return; }
+        msg.style.display = 'none';
+        $('fleet-alerts').textContent = 'Updated ' + fmtAge(j.age_s) + (j.alerts && j.alerts.length ? ' - alerts: ' + j.alerts.join(', ') : '');
+        box.innerHTML = j.machines.length ? j.machines.map(machHtml).join('') : '<p class="hint">No machines in the orchestrator state.</p>';
+    } catch (e) { box.innerHTML = ''; msg.className = 'banner err'; msg.textContent = 'Cannot read the status: ' + e.message; msg.style.display = 'block'; }
+}
+loadFleet(); setInterval(loadFleet, 20000);
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+diff --git a/Model/CasTGAN.py b/Model/CasTGAN.py
+index 6aa6b56..1a3ec7c 100644
+--- a/Model/CasTGAN.py
++++ b/Model/CasTGAN.py
+@@ -1,4 +1,5 @@
+ #from typing import OrderedDict
++import time
+ import warnings
+ import numpy as np
+ import pandas as pd
+@@ -9,8 +10,10 @@ import torch
+ from torch import optim, nn
+ from torch.utils.data import Dataset, DataLoader
+ import torch.nn.functional as F
+-import matplotlib.pyplot as plt
+-import time
++try:
++    import matplotlib.pyplot as plt
++except ImportError:
++    plt = None
+ import yaml
+ import lightgbm as lgb
+ import pathlib
+@@ -482,7 +485,7 @@ class CasTGAN(nn.Module):
+             current_idx = [idx]
+             other_idx = [x for x in range(len(col_info)) if x not in current_idx]
+ 
+-            ds_params = {"verbose": -1}
++            ds_params = {"verbose": -1, "num_threads": 1, "free_raw_data": False}
+ 
+             other_cols = [x for x in col_info if x != col]
+             other_col_names = [x.column_name for x in other_cols]
+@@ -511,18 +514,35 @@ class CasTGAN(nn.Module):
+ 
+             x_train, x_val, y_train, y_val = train_test_split(data, label, test_size = 0.10, shuffle=True, random_state = self._random_seed) 
+             
++            x_train = np.ascontiguousarray(x_train, dtype=np.float32)
++            y_train = np.ascontiguousarray(y_train).ravel()
++            x_val = np.ascontiguousarray(x_val, dtype=np.float32)
++            y_val = np.ascontiguousarray(y_val).ravel()
++
+             train_data = lgb.Dataset(x_train, label = y_train, feature_name = other_col_names, categorical_feature = other_cat_col_names, params = ds_params)
+             val_data = lgb.Dataset(x_val, label = y_val, feature_name = other_col_names, categorical_feature = other_cat_col_names, params = ds_params)
+ 
+-            lgb_params = {'num_leaves': 31, "learning_rate":0.1, 'verbose': -1, "random_state":self._random_seed}
++            lgb_params = {
++                'num_leaves': 31,
++                'learning_rate': 0.1,
++                'verbose': -1,
++                'random_state': self._random_seed,
++                'num_threads': 1,
++                'n_jobs': 1,
++            }
+ 
+             if col.column_gan_type == "numerical":
+                 lgb_params["objective"] = "regression"
+                 lgb_params["metric"] = "mse"
+             else:
+-                lgb_params["objective"] = "multiclass"
+-                lgb_params["num_class"] = col.column_unique_cats
+-                lgb_params["metric"] = "multi_logloss"
++                num_cats = max(2, int(col.column_unique_cats))
++                if num_cats == 2:
++                    lgb_params["objective"] = "binary"
++                    lgb_params["metric"] = "binary_logloss"
++                else:
++                    lgb_params["objective"] = "multiclass"
++                    lgb_params["num_class"] = num_cats
++                    lgb_params["metric"] = "multi_logloss"
+                 lgb_params["is_unbalance"] = True
+ 
+ 
+@@ -922,6 +942,8 @@ class CasTGAN(nn.Module):
+ 
+ 
+     def save_plot(self):
++        if plt is None:
++            return
+         plt.ioff()
+         g_loss_pts = [item for item in self.G_loss]
+         aux_loss_pts = [item for item in self.AUX_loss]

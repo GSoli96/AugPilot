@@ -1,0 +1,18 @@
+{# Barra di navigazione comune. Usa site_nav (iniettato da app.py) e request.path per evidenziare la pagina corrente. #}
+<link rel="stylesheet" href="{{ url_for('static', filename='site/site.css') }}">
+<nav class="sitenav" aria-label="Main navigation">
+  <a class="sn-brand" href="/">AugPilot</a>
+  <ul>
+    {% for it in site_nav %}
+    <li>{% if it.available %}<a class="sn-link" href="{{ it.path }}" {% if request.path == it.path or (it.path != '/' and request.path.startswith(it.path ~ '/')) %}aria-current="page"{% endif %}>{{ it.label }}</a>
+      {% else %}<span class="sn-link off" title="Unavailable: {{ it.error or 'module missing' }}">{{ it.label }}</span>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  <span class="sn-sp"></span>
+  <ul class="sn-more">
+    {% for it in site_nav_more %}
+    <li>{% if it.available %}<a class="sn-link" href="{{ it.path }}" {% if request.path == it.path %}aria-current="page"{% endif %}>{{ it.label }}</a>
+      {% else %}<span class="sn-link off" title="Unavailable: {{ it.error or 'module missing' }}">{{ it.label }}</span>{% endif %}</li>
+    {% endfor %}
+  </ul>
+</nav>

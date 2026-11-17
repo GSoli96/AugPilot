@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Augmentation Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='site/pages.css') }}">
+    <style>
+        .as-wrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; padding: 20px 28px; flex: 1; }
+        @media (max-width: 1000px) { .as-wrap { grid-template-columns: 1fr; padding: 12px; } }
+        .as-chat { display: flex; flex-direction: column; height: calc(100vh - 150px); min-height: 420px; }
+        .as-log { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 14px; border-radius: 10px; max-width: 92%; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; font-size: 14px; border: 1px solid var(--line); }
+        .msg.user { align-self: flex-end; background: var(--panel2); border-color: var(--accent); }
+        .msg.bot { align-self: flex-start; background: var(--panel); }
+        .msg.sys { align-self: center; font-size: 12px; color: var(--muted); }
+        .msg.err { border-color: var(--bad); color: var(--bad); }
+        .msg.warn { border-color: var(--warn); color: var(--warn); font-size: 12px; }
+        .step { border: 1px solid var(--line); border-radius: 6px; margin: 6px 0; font-size: 12px; }
+        .step summary { cursor: pointer; padding: 6px 10px; font-family: ui-monospace, Consolas, monospace; }
+        .step.fail summary { color: var(--bad); }
+        .step.ok summary { color: var(--ok); }
+        .step pre { margin: 0; padding: 8px 10px; overflow-x: auto; max-height: 260px; font-family: ui-monospace, Consolas, monospace; font-size: 11px; color: var(--muted); }
+        .as-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+        .as-input textarea { flex: 1; resize: none; height: 56px; padding: 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: inherit; }
+        .confirm-box { border: 1px solid var(--warn); border-radius: 10px; padding: 10px 14px; background: var(--warnbg); }
+        .confirm-box .btn { margin-right: 8px; margin-top: 8px; }
+        .banner-offline { border: 1px solid var(--warn); background: var(--warnbg); padding: 10px 14px; border-radius: 10px; margin: 14px 28px 0; font-size: 13px; display: none; }
+        .tool-panel label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 3px; }
+        .tool-panel input[type=text], .tool-panel input[type=number], .tool-panel select { width: 100%; }
+        .tool-panel .row { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; margin-top: 8px; }
+            </style>
+</head>
+<body class="pg">
+    {% include '_sitenav.html' %}
+    <header class="pg-head">
+        <div>
+            <h1>Data Augmentation Assistant</h1>
+            <p>Advice based on measured evidence, with the source of every number</p>
+        </div>
+        <div class="pg-status">
+            <span id="mode-badge" class="badge badge-device"><i class="fa-solid fa-circle-notch fa-spin"></i> Checking...</span>
+        </div>
+    </header>
+
+    <div id="offline-banner" class="banner-offline"></div>
+
+    <div class="as-wrap">
+        <section class="card as-chat">
+            <div class="card-header"><h2><i class="fa-solid fa-comments"></i> Conversation</h2>
+                <div class="header-actions"><button class="btn btn-xs btn-outline" onclick="resetChat()">New session</button></div>
+            </div>
+            <div id="log" class="as-log">
+                <div class="msg sys">Describe your problem (modality, data, constraints). The assistant only uses tools and measured results; if a piece of data is missing, it says so. Steps and tool calls appear in this column.</div>
+            </div>
+            <div class="as-input">
+                <textarea id="inp" placeholder="E.g. I have an imbalanced tabular dataset, which algorithm do you recommend?"></textarea>
+                <button id="send-btn" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send</button>
+            </div>
+        </section>
+
+        <aside class="card tool-panel">
+            <div class="card-header"><h2><i class="fa-solid fa-screwdriver-wrench"></i> Direct tools</h2></div>
+            <p style="font-size:12px;color:var(--muted)">They also work in offline mode (no model involved).</p>
+            <label>Modality</label>
+            <select id="t-mod" onchange="loadDatasets()"><option value="tabular">tabular</option><option value="ts">ts (time series)</option><option value="graph">graph</option></select>
+            <label>Dataset</label>
+            <select id="t-ds"><option value="">(none)</option></select>
+            <div class="row">
+                <label style="margin:0"><input type="checkbox" id="t-fair"> fairness</label>
+                <label style="margin:0"><input type="checkbox" id="t-priv"> privacy</label>
+                <label style="margin:0"><input type="checkbox" id="t-con"> constraints</label>
+                <label style="margin:0"><input type="checkbox" id="t-nogpu"> no GPU</label>
+                <label style="margin:0"><input type="checkbox" id="t-exec"> executable only</label>
+            </div>
+            <label>Time budget (s, optional)</label>
+            <input type="number" id="t-time" min="0">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+                <button class="btn btn-sm btn-secondary" onclick="tool('recommend')">Recommend</button>
+                <button class="btn btn-sm btn-secondary" onclick="tool('algos')">Algorithms</button>
+                <button class="btn btn-sm btn-secondary" onclick="tool('datasets')">Dataset</button>
+                <button class="btn btn-sm btn-secondary" onclick="tool('analyze')">Analyze</button>
+                <button class="btn btn-sm btn-secondary" onclick="tool('compare')">Compare</button>
+            </div>
+            <div class="card-header" style="margin-top:18px"><h2><i class="fa-solid fa-list-check"></i> Agent steps</h2></div>
+            <div id="steps" style="font-size:12px;color:var(--muted)">No steps yet.</div>
+        </aside>
+    </div>
+
+{% include '_md_scripts.html' %}
+<script src="{{ url_for('static', filename='site/shared.js') }}"></script>
+<script src="{{ url_for('static', filename='js/assistant_chat.js') }}"></script>
+<script>
+const $ = id => document.getElementById(id);
+const chat = AssistantChat.create({
+    log: 'log', input: 'inp', sendBtn: 'send-btn', steps: 'steps',
+    onStatus: st => {
+        const b = $('mode-badge');
+        if (!st) { b.textContent = 'Status unavailable'; return; }
+        const detail = [st.backend, st.model].filter(Boolean).join(' - ');
+        if (st.mode === 'online') {
+            b.className = 'badge badge-running'; b.innerHTML = '<i class="fa-solid fa-bolt"></i> Online - ' + (detail || '');
+        } else {
+            b.className = 'badge badge-idle'; b.innerHTML = '<i class="fa-solid fa-plug-circle-xmark"></i> Offline';
+            const bn = $('offline-banner'); bn.style.display = 'block';
+            bn.textContent = "OFFLINE MODE: " + st.reason + '. The model is not responding and no answer is simulated; the direct tools on the right are available (deterministic recommender, datasets, results comparison).';
+        }
+    },
+    onResults: mod => { window.location.href = '/'; try { localStorage.setItem('dataaug_mode', mod); } catch (e) {} },
+});
+function send() { chat.send(); }
+function resetChat() { chat.reset(); }
+
+async function init() { await chat.refreshStatus(); loadDatasets(); }
+
+async function loadDatasets() {
+    const sel = $('t-ds'); sel.innerHTML = '<option value="">(none)</option>';
+    const r = await chat.callToolSilent('list_datasets', {modality: $('t-mod').value});
+    if (r && r.datasets) r.datasets.forEach(d => { const o = document.createElement('option'); o.value = d.name; o.textContent = d.name; sel.appendChild(o); });
+}
+
+function tool(kind) {
+    const mod = $('t-mod').value, ds = $('t-ds').value;
+    let name, args = {modality: mod};
+    if (kind === 'datasets') name = 'list_datasets';
+    else if (kind === 'algos') name = 'list_algorithms';
+    else if (kind === 'analyze') { name = 'analyze_dataset'; args.dataset = ds; }
+    else if (kind === 'compare') { name = 'compare_results'; if (ds) args.dataset = ds; }
+    else {
+        name = 'recommend_algorithms';
+        if (ds) args.dataset = ds;
+        if ($('t-fair').checked) args.need_fairness = true;
+        if ($('t-priv').checked) args.need_privacy = true;
+        if ($('t-con').checked) args.need_constraints = true;
+        if ($('t-nogpu').checked) args.gpu = false;
+        if ($('t-exec').checked) args.executable_only = true;
+        if ($('t-time').value) args.time_budget_s = Number($('t-time').value);
+    }
+    chat.runTool(name, args);
+}
+init();
+</script>
+</body>
+</html>

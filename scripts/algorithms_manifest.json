@@ -1,0 +1,840 @@
+{
+ "version": 1,
+ "comment": "Third-party repositories of Algorithms/ (not redistributed). Read by scripts/fetch_algorithms.py. role: executed = run by a worker; data = only data files are read; reference = present for reading, not executed (optional, fetched with --include-optional). commit null = no pin (ref is used). Paths of patches and overlay are relative to scripts/.",
+ "entries": [
+  {
+   "folder": "Fair-SMOTE-master",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/joymallyac/Fair-SMOTE",
+   "commit": "e2c6fbaa806bddbee075e85bf4fa450cce2923ad",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0",
+   "used_by": [
+    "algorithms_runner.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "SMOTE-CDNN-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/coksvictoria/SMOTE-CDNN",
+   "commit": "26fd71ad95e9cd910e5f0c7e8185208da84a0f2c",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 1 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found (no LICENSE, README silent)",
+   "used_by": [
+    "algorithms_runner.py"
+   ],
+   "local_modifications": "SMOTECDNN.py modified (patch)",
+   "patches": [
+    "patches/SMOTE-CDNN-main.patch"
+   ],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GOGGLE-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/tennisonliu/GOGGLE",
+   "commit": "a1db30c9ad2624c44022d8a5f2d533fd607200a0",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 4 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "workers/run_goggle_worker.py"
+   ],
+   "local_modifications": "3 files modified (patch): src/goggle/GoggleModel.py (synthcity optional), model/GraphDecoder.py, model/GraphInputProcessor.py. Local requirements.txt edits and extra colleague scripts/data are not reproduced (not used by the worker).",
+   "patches": [
+    "patches/GOGGLE-main.patch"
+   ],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "CasTGAN-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/abedshantti/CasTGAN",
+   "commit": "962ea1b97c31af4af00235b3d229213d0340d03b",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 1 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "algorithms_runner.py"
+   ],
+   "local_modifications": "Model/CasTGAN.py modified (patch)",
+   "patches": [
+    "patches/CasTGAN-main.patch"
+   ],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "TabFairGAN-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/amirarsalan90/TabFairGAN",
+   "commit": "23ff843dbc2c38ea53cb4bf83b94d1ef639d8b29",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 1 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "algorithms_runner.py"
+   ],
+   "local_modifications": "src/tabfairgan/utils.py modified (patch)",
+   "patches": [
+    "patches/TabFairGAN-main.patch"
+   ],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "cuts-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/eth-sri/cuts",
+   "commit": "56e1cd869f171a5c8a2395dc75f1fc0c6b10c657",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "algorithms_runner.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "Prefair-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/David-Pujol/Prefair",
+   "commit": "713d45047bb79c3a6f369836e73d72f0d773cd16",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found (no LICENSE); contains modified copies of DataSynthesizer (MIT upstream)",
+   "used_by": [
+    "algorithms_runner.py",
+    "scripts/prefair_patch.py"
+   ],
+   "local_modifications": "none; the local copy lacked 3 upstream files (not needed)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "tab-ddpm-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/yandex-research/tab-ddpm",
+   "commit": "9d30f6f1003eb2793d435803760c3bb3b20588d7",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 2 consecutive commits give the same match, the oldest is pinned; 7 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": [
+    "tab-ddpm-main/CTAB-GAN",
+    "tab-ddpm-main/CTAB-GAN-Plus",
+    "tab-ddpm-main/CTGAN/CTGAN",
+    "tab-ddpm-main/scripts",
+    "tab-ddpm-main/lib"
+   ],
+   "licence": "MIT (CTAB-GAN subfolder Apache-2.0; CTAB-GAN-Plus subfolder none found; CTGAN/CTGAN MIT)",
+   "used_by": [
+    "algorithms_runner.py",
+    "config.py",
+    "workers/run_tab_ddpm_worker.py"
+   ],
+   "local_modifications": "4 files modified (patch): CTAB-GAN and CTAB-GAN-Plus model/synthesizer/transformer.py (n_clusters = min(10, rows); original in the local backup of the originals, see the decision log), CTGAN/CTGAN/ctgan/data_transformer.py (rdt replaced by sklearn), lib/data.py (subsample=int(1e9)). Not reproduced: requirements.txt (conda dump), columns.json (regenerated by ensure_columns_entry at run time), data_imbalanced*/exp_imbalanced*/results/clean_env (generated at run time or not needed).",
+   "patches": [
+    "patches/tab-ddpm-main.patch"
+   ],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "tabsyn-main",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/amazon-science/tabsyn",
+   "commit": "6110ad90114cbf51055ee59b5ebbefcea8ab3902",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 2 consecutive commits give the same match, the oldest is pinned; 2 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0 (NOTICE: Amazon)",
+   "used_by": [
+    "workers/run_algo_worker.py"
+   ],
+   "local_modifications": "tabsyn/main.py and tabsyn/vae/main.py modified (patch: epochs from args); main_custom.py is a project/colleague file, not upstream: restored from scripts/algorithms_overlay/ (imported by run_algo_worker.py)",
+   "patches": [
+    "patches/tabsyn-main.patch"
+   ],
+   "overlay": [
+    {
+     "src": "algorithms_overlay/tabsyn-main/main_custom.py",
+     "dst": "main_custom.py"
+    }
+   ],
+   "manual_action": null
+  },
+  {
+   "folder": "TabDiff",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/MinkaiXu/TabDiff",
+   "commit": "5ecdb3356261aea72716cc9a779f31d7ad083bf4",
+   "commit_basis": "git rev-parse HEAD of the local checkout (also confirmed by content match)",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "workers/run_algo_worker.py"
+   ],
+   "local_modifications": "tabdiff/main.py and tabdiff/trainer.py modified (patch); the upstream .gitignore deleted locally is not reproduced",
+   "patches": [
+    "patches/TabDiff.patch"
+   ],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "kamino-master",
+   "role": "data",
+   "optional": false,
+   "url": "https://github.com/cgebest/kamino",
+   "commit": "0e4f63a2199fa140fb050b50516582f616d0583f",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0",
+   "used_by": [
+    "main.py (resolve_dc_file: testdata/<dataset>/<dataset>_dcs.out)"
+   ],
+   "local_modifications": "upstream code unmodified. testdata/<dataset>/*_dcs.out (29 Denial Constraint files from the colleague) are not upstream.",
+   "patches": [],
+   "overlay": [],
+   "manual_action": "Denial Constraint files: copy the colleague's testdata/<dataset>/<dataset>_dcs.out (and _dcs_class_false.out) into Algorithms/kamino-master/testdata/<dataset>/. They are not public and not in the repository. The Kamino worker itself is a Python reimplementation and does not need the upstream code."
+  },
+  {
+   "folder": "SyRFDRes",
+   "role": "executed",
+   "optional": false,
+   "url": null,
+   "commit": null,
+   "commit_basis": null,
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none (not a public repository; rights holder to be clarified)",
+   "used_by": [
+    "algorithms_runner.py",
+    "main.py",
+    "scripts/import_syrfdres.py"
+   ],
+   "local_modifications": "n/a (private code)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": "No public URL: private code of the project/colleague. Obtain the SyRFDRes folder from the authors (it needs syrfd_learning_v8_scalable.py, discovered_rfds_processed/, utility/, utility_src/) and place it at Algorithms/SyRFDRes. Without it the syrfd algorithm cannot run."
+  },
+  {
+   "folder": "DIG",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/divelab/DIG",
+   "commit": "21476b079c9226f38915dcd082b5c2ee0cddaac8",
+   "commit_basis": "git rev-parse HEAD of the local checkout (sparse checkout of dig/auggraph, no modified files)",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": [
+    "dig/auggraph"
+   ],
+   "provides": null,
+   "licence": "GPL-3.0",
+   "used_by": [
+    "modalities/graph/workers/gl_smixup.py"
+   ],
+   "local_modifications": "none (the sparse checkout is reproduced with the sparse list)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GraphAug",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/snudatalab/GraphAug",
+   "commit": "db2be86dd649861de45816d7d97ea98142f455ff",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "research use only (repository LICENSE)",
+   "used_by": [
+    "modalities/graph/workers/gl_graphaug.py",
+    "modalities/graph/workers/gl_common.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GraphCL",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/Shen-Lab/GraphCL",
+   "commit": "b4d7501a2090f94ca0871beb4ec97bf071eaed0f",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "modalities/graph/workers/gl_graphcl.py"
+   ],
+   "local_modifications": "none; the local copy lacked 89 upstream files (not needed)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GraphENS",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/JoonHyung-Park/GraphENS",
+   "commit": "67833317348446e4464a1c4106553bbc1f477896",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "modalities/graph/workers/nl_oversample.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GraphSmote",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/TianxiangZhao/GraphSmote",
+   "commit": "80c116033033c3a3fbf8b6a51dea1ba4a94aa39b",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found (no LICENSE)",
+   "used_by": [
+    "modalities/graph/workers/nl_oversample.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "PyGCL",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/GraphCL/PyGCL",
+   "commit": "f10030d982f08ed3a75e44943572765fe67c0a3e",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 2 consecutive commits give the same match, the oldest is pinned",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0 (setup.cfg says MIT)",
+   "used_by": [
+    "modalities/graph/workers/nl_pygcl.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "g-mixup",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/ahxt/g-mixup",
+   "commit": "0813bb32319abbfb29fe82b9ee0c353a6862a1ad",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found (no LICENSE)",
+   "used_by": [
+    "modalities/graph/workers/gl_gmixup.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "tsgm",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/AlexanderVNikitin/tsgm",
+   "commit": "180369c460ea6c6b2a14aca27c56dbc62b147bf3",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0",
+   "used_by": [
+    "modalities/ts/workers/tsgm_gen.py"
+   ],
+   "local_modifications": "none (the local tsgm.egg-info is created by pip install -e)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "timeVAE",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/abudesai/timeVAE",
+   "commit": "9914576bd44a6facbc94a594a82dd14724969a50",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "modalities/ts/workers/timevae.py",
+    "modalities/ts/datasets.py (data/*.npz)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "diffusion-ts",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/Y-debug-sys/Diffusion-TS",
+   "commit": "566307e6cf2d8095e58de4c6e3a6ae965b69b5b5",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT (holder \"XXX\" in LICENSE)",
+   "used_by": [
+    "modalities/ts/workers/diffusion_ts.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "TimeVQVAE",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/ML4ITS/TimeVQVAE",
+   "commit": "39f98e99cb103ea00694d01c65fd6e7a49416d24",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "modalities/ts/workers/ext_timevqvae.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "unconditional-time-series-diffusion",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/amazon-science/unconditional-time-series-diffusion",
+   "commit": "3eafeffdffefd4d2f5344ac63e5627a746c331a3",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0 (NOTICE)",
+   "used_by": [
+    "modalities/ts/workers/ext_tsdiff.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "simpsi",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/hyun-ryu/simpsi",
+   "commit": "011ac65b6600715e967bde18fa315b18e388e500",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0",
+   "used_by": [
+    "modalities/ts/workers/ext_simpsi.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "time_series_augmentation",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/uchidalab/time_series_augmentation",
+   "commit": "656318d18c0945080c969ce2bf839760880b8d30",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0",
+   "used_by": [
+    "modalities/ts/workers/ext_uchida.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "kovae",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/azencot-group/kovae",
+   "commit": "bf8cc95df918fc5cf57955ab28ba1ada0b634eef",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found (no LICENSE)",
+   "used_by": [
+    "modalities/ts/workers/ext_kovae.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "Conditional-Sig-Wasserstein-GANs",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/SigCGANs/Conditional-Sig-Wasserstein-GANs",
+   "commit": "32ea56bd4abc6b934cf754279c3326ac3fae65e4",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found (no LICENSE)",
+   "used_by": [
+    "modalities/ts/workers/ext_sigcwgan.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "ImagenTime",
+   "role": "executed",
+   "optional": false,
+   "url": "https://github.com/azencot-group/ImagenTime",
+   "commit": "7cf9bd5018d522eef155a476ecfeb23feb9e3d6a",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 2 consecutive commits give the same match, the oldest is pinned",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "no LICENSE; 4 source files carry the NVIDIA CC BY-NC-SA 4.0 header (non commercial)",
+   "used_by": [
+    "modalities/ts/workers/ext_imagentime.py"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "TimeGAN",
+   "role": "data",
+   "optional": false,
+   "url": "https://github.com/jsyoon0823/TimeGAN",
+   "commit": "8f6181cb9b9d2fa0c930cd902411d9ac8a308e07",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0 (code); the data files have their own source",
+   "used_by": [
+    "modalities/ts/datasets.py (data/stock_data.csv, data/energy_data.csv)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "OCTree-main",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/jaehyun513/OCTree",
+   "commit": "a11c485071a9bdac1c5773cc7408649ffa14ba36",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 4 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "4 files modified locally, not reproduced (folder not executed)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "HARMONIC-main",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/The-FinAI/HARMONIC",
+   "commit": "4add1ae3f3448d0873e6f4dd91bf3e097f646fd3",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 1 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none on the repository (MIT only for src/Eval-Metrics/eval-llm/syndata-eval)",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "1 file modified locally (scripts/data_split.py), not reproduced (folder not executed)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "synthetic-tabular-LLM-main",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/seharanul17/synthetic-tabular-LLM",
+   "commit": "80ed7f9d98b2a97c32efabbee188758bdca5d912",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 2 local file(s) differ from upstream",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "Apache-2.0",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "2 files modified locally, not reproduced (folder not executed)",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "FLAG",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/devnkong/FLAG",
+   "commit": "b507e6286797b8a726d594c38fd69c54cd1b19ef",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GRAND",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/THUDM/GRAND",
+   "commit": "7a2fd6e7c3f20ca2c84b06ec1c5dc7f227dbfe2b",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "DropEdge",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/DropEdge/DropEdge",
+   "commit": "390cd71223c73ddb9bba47bd990435dde2de450d",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GAug",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/zhao-tong/GAug",
+   "commit": "4091bbdee953c4cb9ad493379deec086ee67b53c",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "GraphMix",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/vikasverma1077/GraphMix",
+   "commit": "064187f5adf36b1ab2f224109c20d40bfa383ffd",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found; losses.py and ramps.py carry a CC BY-NC 4.0 header",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "RGAN",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/ratschlab/RGAN",
+   "commit": "785e0657b144562a9a6dd73bbb87ff2ffdbb6068",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit; 2 consecutive commits give the same match, the oldest is pinned",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "MIT",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  },
+  {
+   "folder": "TSGBench",
+   "role": "reference",
+   "optional": true,
+   "url": "https://github.com/YihaoAng/TSGBench",
+   "commit": "3d090e5636882c412acc692af8b6f9c149c141d9",
+   "commit_basis": "content match: every local file (line endings normalised) found in upstream at this commit",
+   "ref": "HEAD",
+   "subdir": null,
+   "sparse": null,
+   "provides": null,
+   "licence": "none found",
+   "used_by": [
+    "not executed (surrogate or rewrite in the project)"
+   ],
+   "local_modifications": "none",
+   "patches": [],
+   "overlay": [],
+   "manual_action": null
+  }
+ ]
+}
