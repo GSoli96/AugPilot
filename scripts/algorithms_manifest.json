@@ -59,7 +59,7 @@
    "used_by": [
     "workers/run_goggle_worker.py"
    ],
-   "local_modifications": "3 files modified (patch): src/goggle/GoggleModel.py (synthcity optional), model/GraphDecoder.py, model/GraphInputProcessor.py. Local requirements.txt edits and extra colleague scripts/data are not reproduced (not used by the worker).",
+   "local_modifications": "3 files modified (patch): src/goggle/GoggleModel.py (synthcity optional), model/GraphDecoder.py, model/GraphInputProcessor.py. Local requirements.txt edits and extra local scripts/data are not reproduced (not used by the worker).",
    "patches": [
     "patches/GOGGLE-main.patch"
    ],
@@ -196,7 +196,7 @@
    "used_by": [
     "workers/run_algo_worker.py"
    ],
-   "local_modifications": "tabsyn/main.py and tabsyn/vae/main.py modified (patch: epochs from args); main_custom.py is a project/colleague file, not upstream: restored from scripts/algorithms_overlay/ (imported by run_algo_worker.py)",
+   "local_modifications": "tabsyn/main.py and tabsyn/vae/main.py modified (patch: epochs from args); main_custom.py is a project file, not upstream: restored from scripts/algorithms_overlay/ (imported by run_algo_worker.py)",
    "patches": [
     "patches/tabsyn-main.patch"
    ],
@@ -245,10 +245,10 @@
    "used_by": [
     "main.py (resolve_dc_file: testdata/<dataset>/<dataset>_dcs.out)"
    ],
-   "local_modifications": "upstream code unmodified. testdata/<dataset>/*_dcs.out (29 Denial Constraint files from the colleague) are not upstream.",
+   "local_modifications": "upstream code unmodified. testdata/<dataset>/*_dcs.out (29 Denial Constraint files from the project authors) are not upstream.",
    "patches": [],
    "overlay": [],
-   "manual_action": "Denial Constraint files: copy the colleague's testdata/<dataset>/<dataset>_dcs.out (and _dcs_class_false.out) into Algorithms/kamino-master/testdata/<dataset>/. They are not public and not in the repository. The Kamino worker itself is a Python reimplementation and does not need the upstream code."
+   "manual_action": "Denial Constraint files: copy the authors' testdata/<dataset>/<dataset>_dcs.out (and _dcs_class_false.out) into Algorithms/kamino-master/testdata/<dataset>/. They are not public and not in the repository. The Kamino worker itself is a Python reimplementation and does not need the upstream code."
   },
   {
    "folder": "SyRFDRes",
@@ -270,7 +270,7 @@
    "local_modifications": "n/a (private code)",
    "patches": [],
    "overlay": [],
-   "manual_action": "No public URL: private code of the project/colleague. Obtain the SyRFDRes folder from the authors (it needs syrfd_learning_v8_scalable.py, discovered_rfds_processed/, utility/, utility_src/) and place it at Algorithms/SyRFDRes. Without it the syrfd algorithm cannot run."
+   "manual_action": "No public URL: private code of the project. Obtain the SyRFDRes folder from the authors (it needs syrfd_learning_v8_scalable.py, discovered_rfds_processed/, utility/, utility_src/) and place it at Algorithms/SyRFDRes. Without it the syrfd algorithm cannot run."
   },
   {
    "folder": "DIG",

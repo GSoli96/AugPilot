@@ -12,7 +12,7 @@ Per ogni (dataset, seed) produce in `bench/work/tabular/<dataset>/seed<k>/`:
 Lo split è deterministico (sklearn, random_state=seed) e idempotente: se i file esistono
 e meta.json corrisponde, non li riscrive.
 
-Nota di metodo: RFD e Denial Constraints sono stati scoperti dal collega sull'intera
+Nota di metodo: RFD e Denial Constraints sono stati scoperti sull'intera
 partizione minoritaria (test compreso); è una fuga di soli vincoli, dichiarata nel paper.
 """
 from __future__ import annotations

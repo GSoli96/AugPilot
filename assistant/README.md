@@ -35,7 +35,7 @@ rango medio su fidelity (JS, KS, WD, pMSE, MMD) e diversity (Precision, Recall, 
 tempo mediano; i `described` non sono mai classificati; filtri duri per fairness/privacy/vincoli/budget di tempo.
 
 ## Limiti noti
-- Dati misurati tabulari: pochi dataset (iris0, abalone9-18, cleveland-0_vs_4, migraine_0), tempi dal Mac del collega,
+- Dati misurati tabulari: pochi dataset (iris0, abalone9-18, cleveland-0_vs_4, migraine_0), tempi misurati su un'altra macchina,
   nessun dato GPU (tutti 0): il fabbisogno di GPU dei tabulari e' "ignoto". ts/graph: nessun CSV di risultati finche' non si esegue.
 - I tag fairness/privacy/vincoli sono derivati da descrizioni e titoli (euristica); `imbalance_ratio`/`n_cols` non pilotano regole.
 - I dataset `*_min` del tabulare contengono la sola classe minoritaria: lo sbilanciamento non si ricava dal file.

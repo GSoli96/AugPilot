@@ -8,7 +8,7 @@ Si riportano le metriche di entrambi e il delta (TR+S - TRTR).
 
 Classificatori: LR, RF, XGB (se disponibile), MLP, con iperparametri di default fissati e seed;
 niente grid search, per stare nei tempi del benchmark. Le definizioni delle metriche seguono
-la pipeline di utilità del collega (`Algorithms/SyRFDRes/utility_src/metrics.py`): F1 e AUC-PR
+la pipeline di utilità di SyRFDRes (`Algorithms/SyRFDRes/utility_src/metrics.py`): F1 e AUC-PR
 della classe minoritaria (positiva), balanced accuracy.
 
 Uso da riga di comando:
