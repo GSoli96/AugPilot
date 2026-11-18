@@ -265,7 +265,7 @@
    "used_by": [
     "algorithms_runner.py",
     "main.py",
-    "scripts/import_syrfdres.py"
+    "scripts/import_dati_esterni.py"
    ],
    "local_modifications": "n/a (private code)",
    "patches": [],
